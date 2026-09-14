@@ -10,6 +10,7 @@ import PdpA from "../pdp/PdpA_ClassicGallery";
 import PdpB from "../pdp/PdpB_EditorialScroll";
 import PdpC from "../pdp/PdpC_Configurator";
 import PdpD from "../pdp/PdpD_Conversion";
+import PdpE from "../pdp/PdpE_LongForm";
 import NotFound from "./NotFound";
 
 export default function ProductPage() {
@@ -40,6 +41,8 @@ export default function ProductPage() {
       return <PdpC product={product} />;
     case "d":
       return <PdpD product={product} />;
+    case "e":
+      return <PdpE product={product} />;
     default:
       return <PdpA product={product} />;
   }

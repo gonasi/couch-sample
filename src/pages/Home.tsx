@@ -8,11 +8,13 @@ import ProductCard from "../components/ProductCard";
 import { ComparisonTable, UgcStrip } from "../components/Sections";
 import { ContentIcon, Img } from "../components/ui";
 import VideoModal from "../components/VideoModal";
+import TesterHub from "../components/TesterHub";
 
 export default function Home() {
   const [film, setFilm] = useState(false);
   return (
     <div className="page">
+      <TesterHub />
       <section
         id="top"
         style={{

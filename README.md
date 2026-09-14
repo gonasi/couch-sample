@@ -1,6 +1,6 @@
 # GH2 Cloud Couch: demo store
 
-A clickable demo e-commerce store built from the Claude Design redesign ("Website redesign with font pairings"). It has **4 product page (PDP) variations** for product testing.
+A clickable demo e-commerce store built from the Claude Design redesign ("Website redesign with font pairings"). It has **5 product page (PDP) variations** for product testing.
 
 Everything is mocked: cart, discount codes, checkout, order confirmation, reviews, chat, and newsletter all run in the browser. No backend, no real payments.
 
@@ -14,8 +14,9 @@ Everything is mocked: cart, discount codes, checkout, order confirmation, review
 | B   | Editorial Scroll | Faithful port of _PDP Option B_: full-bleed hero, long-form story, fixed buy bar                    | [open](https://gonasi.github.io/couch-sample/#/product/5-piece-cloud?v=b) |
 | C   | Configurator     | Step-by-step builder (layout → fabric → add-ons → review) with a live top-down diagram              | [open](https://gonasi.github.io/couch-sample/#/product/5-piece-cloud?v=c) |
 | D   | Conversion       | Sale countdown, low-stock cues, bundle tiers, express pay, reviews high on the page, sticky ATC bar | [open](https://gonasi.github.io/couch-sample/#/product/5-piece-cloud?v=d) |
+| E | Long-form | High-converting sales page: deep reviews (search, star/topic/size filters, photos, pagination), customer Q&A, FAQ tabs, press, guarantee, sticky ATC | [open](https://gonasi.github.io/couch-sample/#/product/5-piece-cloud?v=e) |
 
-Add `?v=a|b|c|d` to any couch URL to pick a variant. The **Demo controls** pill (bottom-right) also switches the variant and the theme (Editorial / Modern / Garden, from the design canvas). The last choice is remembered.
+Add `?v=a|b|c|d|e` to any couch URL to pick a variant. The **Demo controls** pill (bottom-right) also switches the variant and the theme (Editorial / Modern / Garden, from the design canvas). The last choice is remembered.
 
 ## Things to try
 

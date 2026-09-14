@@ -807,6 +807,40 @@ details summary::-webkit-details-marker {
   background-image: radial-gradient(var(--line) 1.2px, transparent 1.2px);
   background-size: 18px 18px;
 }
+.review-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+}
+.gallery-e {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.gallery-e .thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+@media (max-width: 700px) {
+  .review-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .gallery-e {
+    grid-template-columns: 1fr;
+  }
+  .gallery-e .thumbs {
+    flex-direction: row;
+    order: 2;
+    overflow-x: auto;
+  }
+  .gallery-e .thumbs > * {
+    width: 64px;
+    flex: none;
+  }
+}
 .visually-hidden {
   position: absolute;
   width: 1px;

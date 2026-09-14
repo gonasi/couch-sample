@@ -10,9 +10,10 @@ import {
 import { applyTheme, type ThemeName } from "../theme/themes";
 import { readStore, writeStore } from "../lib/money";
 
-export type Variant = "a" | "b" | "c" | "d";
+export type Variant = "a" | "b" | "c" | "d" | "e";
+export const VARIANTS: Variant[] = ["a", "b", "c", "d", "e"];
 export const isVariant = (s: string | null | undefined): s is Variant =>
-  s === "a" || s === "b" || s === "c" || s === "d";
+  VARIANTS.includes(s as Variant);
 
 interface Toast {
   id: number;

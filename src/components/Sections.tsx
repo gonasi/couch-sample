@@ -280,7 +280,7 @@ export function ReviewsSection({
   );
 }
 
-function WriteReviewModal({
+export function WriteReviewModal({
   open,
   onClose,
   onDone,

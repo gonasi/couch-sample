@@ -11,12 +11,15 @@ export const VARIANT_NAMES: Record<Variant, string> = {
   b: "Editorial Scroll",
   c: "Configurator",
   d: "Conversion",
+  e: "Long-form",
 };
 
 /** Floating control used by testers to flip between PDP variants and themes. */
 export default function DemoSwitcher() {
   const { variant, setVariant, theme, setTheme, bottomOffset } = useUI();
-  const [open, setOpen] = useState(() => readStore("gh2-switcher-open", window.innerWidth > 700));
+  const [open, setOpen] = useState(() =>
+    readStore("gh2-switcher-open", window.innerWidth > 700),
+  );
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -76,7 +79,7 @@ export default function DemoSwitcher() {
               </strong>
             </div>
             <div className="seg">
-              {(["a", "b", "c", "d"] as Variant[]).map((v) => (
+              {(["a", "b", "c", "d", "e"] as Variant[]).map((v) => (
                 <button
                   key={v}
                   className={
