@@ -1,13 +1,12 @@
 import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 import { COUCHES, type Product } from "../data/products";
 import { IMG } from "../data/images";
-import { PDP_FAQ } from "../data/content";
 import { REVIEWS, REVIEW_STATS } from "../data/reviews";
 import { useProductSelection } from "../hooks/useProductSelection";
 import { useUI } from "../context/UIContext";
 import { money, moneyShort } from "../lib/money";
-import { Accordion, Img, Swatches } from "../components/ui";
+import { Img, Swatches } from "../components/ui";
+import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
 import { scrollToId } from "./shared";
 
 /** PDP Option B — Editorial Scroll (faithful port of the design canvas). */
@@ -374,41 +373,19 @@ export default function PdpB({ product }: { product: Product }) {
               </div>
             ))}
           </div>
-          <Link
-            to="/reviews"
+          <button
             className="link-underline"
             style={{ display: "inline-block", marginTop: 32 }}
+            onClick={() => scrollToId("reviews")}
           >
             Read all 5,250 reviews
-          </Link>
+          </button>
         </div>
       </section>
 
-      <section
-        style={{ maxWidth: 1100, margin: "88px auto 0", padding: "0 28px" }}
-      >
-        <h2
-          className="display"
-          style={{ fontSize: "clamp(32px,4.4vw,52px)", marginBottom: 28 }}
-        >
-          Questions
-        </h2>
-        <div style={{ borderTop: "1px solid var(--line)" }}>
-          <Accordion
-            size={18}
-            items={PDP_FAQ.slice(0, 4).map((f) => ({
-              title: f.q,
-              content: (
-                <div
-                  style={{ fontSize: 16, lineHeight: 1.7, maxWidth: "70ch" }}
-                >
-                  {f.a}
-                </div>
-              ),
-            }))}
-          />
-        </div>
-      </section>
+      <DeepReviews />
+      <QandA />
+      <FaqTabs />
 
       <div
         ref={barRef}

@@ -16,7 +16,6 @@ import {
   type Module,
   type Product,
 } from "../data/products";
-import { PDP_FAQ } from "../data/content";
 import { useProductSelection } from "../hooks/useProductSelection";
 import { useCart } from "../context/CartContext";
 import { useUI } from "../context/UIContext";
@@ -25,14 +24,9 @@ import LayoutDiagram, {
   dimsFromLayout,
   type ExtraModule,
 } from "../components/LayoutDiagram";
-import {
-  Accordion,
-  Breadcrumbs,
-  Img,
-  QtyStepper,
-  Stars,
-} from "../components/ui";
-import { FeatureCards, ReviewsSection } from "../components/Sections";
+import { Breadcrumbs, Img, QtyStepper, Stars } from "../components/ui";
+import { FeatureCards } from "../components/Sections";
+import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
 import { deliveryDate } from "./shared";
 
 const STEPS = ["Layout", "Fabric", "Add-ons", "Review"];
@@ -806,17 +800,9 @@ export default function PdpC({ product }: { product: Product }) {
       </section>
 
       <FeatureCards />
-      <ReviewsSection />
-      <section className="container-narrow section">
-        <h2 className="display h2" style={{ marginBottom: 20 }}>
-          Questions
-        </h2>
-        <div style={{ borderTop: "1px solid var(--line)" }}>
-          <Accordion
-            items={PDP_FAQ.map((f) => ({ title: f.q, content: f.a }))}
-          />
-        </div>
-      </section>
+      <DeepReviews />
+      <QandA />
+      <FaqTabs />
     </div>
   );
 }

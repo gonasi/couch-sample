@@ -6,7 +6,8 @@ import { IMG } from "../data/images";
 import { COLORS, COUCHES } from "../data/products";
 import { Accordion, Breadcrumbs, Img } from "../components/ui";
 import LayoutDiagram, { dimsFromLayout } from "../components/LayoutDiagram";
-import { ReviewsSection, UgcStrip } from "../components/Sections";
+import { UgcStrip } from "../components/Sections";
+import { DeepReviews, QandA } from "../components/DeepSections";
 import NotFound from "./NotFound";
 
 export function Support() {
@@ -440,7 +441,8 @@ export function ReviewsPage() {
   return (
     <div className="page">
       <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Reviews" }]} />
-      <ReviewsSection title="Customer Reviews" />
+      <DeepReviews />
+      <QandA />
       <UgcStrip />
     </div>
   );

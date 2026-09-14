@@ -13,7 +13,7 @@ import {
   Truck,
 } from "lucide-react";
 import { COLORS, COUCHES, getById, type Product } from "../data/products";
-import { BENEFITS, PDP_FAQ } from "../data/content";
+import { BENEFITS } from "../data/content";
 import { HOME_IMAGES, UGC } from "../data/images";
 import { REVIEWS } from "../data/reviews";
 import { useProductSelection } from "../hooks/useProductSelection";
@@ -34,6 +34,7 @@ import {
   RatingSummary,
   UgcStrip,
 } from "../components/Sections";
+import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
 import {
   deliveryDate,
   detailItems,
@@ -671,9 +672,12 @@ export default function PdpD({ product }: { product: Product }) {
           style={{ gap: 16, marginBottom: 24, alignItems: "flex-end" }}
         >
           <h2 className="display h2">5,250 reasons to love it</h2>
-          <Link to="/reviews" className="link-underline">
+          <button
+            className="link-underline"
+            onClick={() => scrollToId("reviews")}
+          >
             See all reviews
-          </Link>
+          </button>
         </div>
         <div
           className="grid-auto"
@@ -752,29 +756,16 @@ export default function PdpD({ product }: { product: Product }) {
 
       <ComparisonTable title="GH2 vs. the others" />
 
-      <section
-        className="container section grid-auto"
-        style={{
-          ["--min" as string]: "320px",
-          ["--gap" as string]: "48px",
-          alignItems: "start",
-        }}
-      >
-        <div>
-          <h2 className="display h3" style={{ marginBottom: 12 }}>
-            Details
-          </h2>
-          <Accordion items={detailItems(product)} icon="chevron" />
-        </div>
-        <div>
-          <h2 className="display h3" style={{ marginBottom: 12 }}>
-            FAQ
-          </h2>
-          <Accordion
-            items={PDP_FAQ.map((f) => ({ title: f.q, content: f.a }))}
-          />
-        </div>
+      <section className="container-narrow section">
+        <h2 className="display h3" style={{ marginBottom: 12 }}>
+          Details
+        </h2>
+        <Accordion items={detailItems(product)} icon="chevron" />
       </section>
+
+      <DeepReviews />
+      <QandA />
+      <FaqTabs />
 
       <section
         style={{

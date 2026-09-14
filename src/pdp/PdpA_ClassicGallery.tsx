@@ -13,11 +13,8 @@ import {
   Swatches,
   TrustRow,
 } from "../components/ui";
-import {
-  FeatureCards,
-  PairsWellWith,
-  ReviewsSection,
-} from "../components/Sections";
+import { FeatureCards, PairsWellWith } from "../components/Sections";
+import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
 import { Lightbox } from "../components/Overlays";
 import VideoModal from "../components/VideoModal";
 import { detailItems, scrollToId } from "./shared";
@@ -249,7 +246,9 @@ export default function PdpA({ product }: { product: Product }) {
       </section>
 
       <FeatureCards />
-      <ReviewsSection />
+      <DeepReviews />
+      <QandA />
+      <FaqTabs />
       <PairsWellWith />
 
       <Lightbox
