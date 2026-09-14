@@ -1,0 +1,269 @@
+import { useEffect, useState } from "react";
+import { Expand, Play } from "lucide-react";
+import type { Product } from "../data/products";
+import { useProductSelection } from "../hooks/useProductSelection";
+import { money } from "../lib/money";
+import {
+  Accordion,
+  Breadcrumbs,
+  ConfigPicker,
+  Img,
+  QtyStepper,
+  Stars,
+  Swatches,
+  TrustRow,
+} from "../components/ui";
+import {
+  FeatureCards,
+  PairsWellWith,
+  ReviewsSection,
+} from "../components/Sections";
+import { Lightbox } from "../components/Overlays";
+import VideoModal from "../components/VideoModal";
+import { detailItems, scrollToId } from "./shared";
+
+/** PDP Option A — Classic Gallery (faithful port of the design canvas). */
+export default function PdpA({ product }: { product: Product }) {
+  const sel = useProductSelection(product);
+  const [active, setActive] = useState(0);
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const [video, setVideo] = useState(false);
+
+  useEffect(() => setActive(0), [sel.color, product.slug]);
+
+  return (
+    <div className="page">
+      <Breadcrumbs
+        items={[
+          { label: "Home", to: "/" },
+          { label: "Shop", to: "/shop" },
+          { label: product.name },
+        ]}
+      />
+
+      <section
+        className="container grid-auto"
+        style={{
+          ["--min" as string]: "330px",
+          ["--gap" as string]: "52px",
+          paddingTop: 22,
+          alignItems: "start",
+        }}
+      >
+        <div
+          className="sticky-col"
+          style={{ display: "grid", gap: 12, top: 92 }}
+        >
+          <div style={{ position: "relative" }}>
+            <button
+              onClick={() => setLightbox(active)}
+              style={{
+                padding: 0,
+                border: 0,
+                background: "none",
+                cursor: "zoom-in",
+                display: "block",
+                width: "100%",
+              }}
+              aria-label="Open image viewer"
+            >
+              <Img
+                src={sel.images[active]}
+                alt={`${product.name} in ${sel.color}`}
+                w={1400}
+                ratio="4/3"
+                radius="var(--radius)"
+                style={{ border: "1px solid var(--line)" }}
+                eager
+              />
+            </button>
+            <span
+              className="pill pill-soft"
+              style={{
+                position: "absolute",
+                left: 16,
+                bottom: 16,
+                fontFamily: "var(--mono)",
+                fontSize: 11,
+              }}
+            >
+              {active + 1} / {sel.images.length}
+            </span>
+            <button
+              className="icon-btn"
+              onClick={() => setLightbox(active)}
+              aria-label="Expand"
+              style={{ position: "absolute", right: 16, bottom: 16 }}
+            >
+              <Expand size={16} />
+            </button>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(5,1fr)",
+              gap: 10,
+            }}
+          >
+            {sel.images.slice(0, 4).map((img, i) => (
+              <button
+                key={img + i}
+                onClick={() => setActive(i)}
+                aria-label={`Show photo ${i + 1}`}
+                style={{
+                  padding: 0,
+                  background: "none",
+                  cursor: "pointer",
+                  borderRadius: 10,
+                  border:
+                    active === i
+                      ? "2px solid var(--ink)"
+                      : "1px solid var(--line)",
+                  overflow: "hidden",
+                }}
+              >
+                <Img src={img} alt="" w={220} ratio="1" />
+              </button>
+            ))}
+            <button
+              onClick={() => setVideo(true)}
+              aria-label="Play product video"
+              style={{
+                padding: 0,
+                background: "none",
+                cursor: "pointer",
+                borderRadius: 10,
+                border: "1px solid var(--line)",
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              <Img
+                src={sel.images[4] ?? sel.images[0]}
+                alt=""
+                w={220}
+                ratio="1"
+                style={{ filter: "brightness(.75)" }}
+              />
+              <span
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                }}
+              >
+                <Play size={18} fill="#fff" />
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div className="stack" style={{ ["--gap" as string]: "22px" }}>
+          <div>
+            <span className="eyebrow">Cloud Collection</span>
+            <h1 className="display h1" style={{ margin: "10px 0 12px" }}>
+              {product.name}
+            </h1>
+            <div className="row" style={{ gap: 10, fontSize: 14.5 }}>
+              <Stars />
+              <span>4.9</span>
+              <button
+                className="text-btn"
+                style={{ textDecoration: "none", fontSize: 14.5 }}
+                onClick={() => scrollToId("reviews")}
+              >
+                · 5,250+ reviews
+              </button>
+            </div>
+          </div>
+          <div className="row wrap" style={{ alignItems: "baseline", gap: 12 }}>
+            <span className="display" style={{ fontSize: 34 }}>
+              {money(sel.price)}
+            </span>
+            <s className="muted" style={{ fontSize: 17 }}>
+              {money(sel.compare)}
+            </s>
+            <span className="pill pill-accent" style={{ fontSize: 11.5 }}>
+              Save {money(sel.savings).replace(".00", "")}
+            </span>
+          </div>
+          <p className="muted" style={{ margin: "-10px 0 0", fontSize: 14.5 }}>
+            or 4 interest-free payments of {money(sel.split)}. No sales tax
+            collected at checkout.
+          </p>
+          <p
+            className="muted"
+            style={
+              {
+                margin: 0,
+                fontSize: 16.5,
+                lineHeight: 1.65,
+                textWrap: "pretty",
+              } as React.CSSProperties
+            }
+          >
+            {product.description}
+          </p>
+
+          <div>
+            <div className="row between label" style={{ marginBottom: 12 }}>
+              <span>Color</span>
+              <span
+                className="muted"
+                style={{ letterSpacing: 0, textTransform: "none" }}
+              >
+                {sel.color}
+              </span>
+            </div>
+            <Swatches value={sel.color} onChange={sel.setColor} />
+          </div>
+
+          <div>
+            <div className="label" style={{ marginBottom: 12 }}>
+              Configuration
+            </div>
+            <ConfigPicker current={product.slug} onPick={sel.pickConfig} />
+          </div>
+
+          <div className="row wrap" style={{ gap: 12 }}>
+            <QtyStepper value={sel.qty} onChange={sel.setQty} />
+            <button
+              className="btn"
+              style={{ flex: 1, minWidth: 220, padding: "17px 28px" }}
+              onClick={() => sel.addToCart()}
+            >
+              Add to Cart — {money(sel.price * sel.qty)}
+            </button>
+          </div>
+
+          <TrustRow />
+          <Accordion
+            items={detailItems(product)}
+            defaultOpen={0}
+            icon="chevron"
+          />
+        </div>
+      </section>
+
+      <FeatureCards />
+      <ReviewsSection />
+      <PairsWellWith />
+
+      <Lightbox
+        images={sel.images}
+        index={lightbox}
+        onClose={() => setLightbox(null)}
+        onIndex={setLightbox}
+      />
+      <VideoModal
+        open={video}
+        onClose={() => setVideo(false)}
+        poster={sel.images[1] ?? sel.images[0]}
+        title={`${product.name} — 0:45`}
+      />
+    </div>
+  );
+}

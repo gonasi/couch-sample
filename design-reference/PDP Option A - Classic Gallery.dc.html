@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{--bg:#F7F2EA;--surface:#FFFDF9;--ink:#241C16;--muted:#6E6157;--accent:#B4563A;--accentInk:#FFF8F4;--line:#E4DACB;--soft:#EFE7DA;--display:'Playfair Display',Georgia,serif;--body:'Karla',system-ui,sans-serif;}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;}
+a{color:var(--ink);text-decoration:none;}a:hover{color:var(--accent);}
+details summary::-webkit-details-marker{display:none;}
+</style>
+</helmet>
+
+<div style="background:var(--bg);color:var(--ink);font-family:var(--body);min-height:100vh">
+
+  <header style="position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--line)">
+    <div style="max-width:1280px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;min-height:68px">
+      <nav style="display:flex;gap:26px;font-size:13.5px;letter-spacing:.05em;text-transform:uppercase"><a href="#">Home</a><a href="#">Shop</a><a href="#">Support</a></nav>
+      <span style="font-family:var(--display);font-weight:600;font-size:24px;letter-spacing:.18em">GH2</span>
+      <div style="display:flex;justify-content:flex-end;gap:18px;font-size:13.5px;letter-spacing:.05em;text-transform:uppercase"><a href="#" style="display:flex;align-items:center;gap:7px"><i data-lucide="search" style="width:16px;height:16px"></i>Search</a><a href="#" style="display:flex;align-items:center;gap:7px"><i data-lucide="shopping-bag" style="width:16px;height:16px"></i>Cart</a></div>
+    </div>
+  </header>
+
+  <div style="max-width:1280px;margin:0 auto;padding:26px 24px 0;font-size:13.5px;color:var(--muted);display:flex;gap:8px"><a href="#">Home</a><span>/</span><a href="#">Shop</a><span>/</span><span style="color:var(--ink)">5 Piece Cloud</span></div>
+
+  <section style="max-width:1280px;margin:0 auto;padding:22px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:52px;align-items:start">
+    <div style="display:grid;gap:12px;position:sticky;top:92px">
+      <div style="aspect-ratio:4/3;border-radius:18px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:flex-end;justify-content:space-between;padding:16px">
+        <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:7px 12px;border-radius:999px">hero 4:3</span>
+        <span style="background:var(--surface);border:1px solid var(--line);border-radius:999px;width:38px;height:38px;display:flex;align-items:center;justify-content:center"><i data-lucide="expand" style="width:16px;height:16px"></i></span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+        <div style="aspect-ratio:1;border-radius:10px;border:2px solid var(--ink);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+        <div style="aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+        <div style="aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+        <div style="aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+        <div style="aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px);display:flex;align-items:center;justify-content:center"><i data-lucide="play" style="width:16px;height:16px;color:var(--muted)"></i></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <div>
+        <span style="font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Cloud Collection</span>
+        <h1 style="font-family:var(--display);font-weight:600;font-size:clamp(30px,4vw,46px);line-height:1.05;margin:10px 0 12px">5 Piece Cloud</h1>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14.5px"><span style="color:var(--accent);letter-spacing:.12em">★★★★★</span><span>4.9</span><span style="color:var(--muted)">· 5,250+ reviews</span></div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span style="font-family:var(--display);font-weight:600;font-size:34px">$2,925.00</span>
+        <s style="color:var(--muted);font-size:17px">$4,125.00</s>
+        <span style="background:var(--accent);color:var(--accentInk);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">Save $1,200</span>
+      </div>
+      <p style="margin:-10px 0 0;font-size:14.5px;color:var(--muted)">or 4 payments of $731.25. No sales tax collected at checkout.</p>
+      <p style="margin:0;font-size:16.5px;line-height:1.65;color:var(--muted);text-wrap:pretty">A five-piece modular sectional with a feather-blend top over a high-resilience foam core. Every cover unzips and machine washes, and hidden connectors keep the pieces flush no matter how often you rearrange.</p>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px"><span>Color</span><span style="color:var(--muted);letter-spacing:0;text-transform:none">{{ color }}</span></div>
+        <div style="display:flex;gap:12px">
+          <button onClick="{{ pickColor }}" data-name="White" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:#FAFAF8;cursor:pointer;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)"></button>
+          <button onClick="{{ pickColor }}" data-name="Black" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:#22221F;cursor:pointer"></button>
+          <button onClick="{{ pickColor }}" data-name="Light Grey" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:#C9C7C1;cursor:pointer"></button>
+          <button onClick="{{ pickColor }}" data-name="Khaki" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:#B6A27C;cursor:pointer"></button>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">Configuration</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+          <button onClick="{{ pickConfig }}" style="font-family:var(--body);text-align:left;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer"><div style="font-size:15px">4 Piece “Pit”</div><div style="font-size:13px;color:var(--muted)">$2,550 · seats 4</div></button>
+          <button onClick="{{ pickConfig }}" style="font-family:var(--body);text-align:left;padding:13px 15px;border-radius:12px;border:2px solid var(--ink);background:var(--surface);color:var(--ink);cursor:pointer"><div style="font-size:15px">5 Piece</div><div style="font-size:13px;color:var(--muted)">$2,925 · seats 5</div></button>
+          <button onClick="{{ pickConfig }}" style="font-family:var(--body);text-align:left;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer"><div style="font-size:15px">6 Piece “Pit”</div><div style="font-size:13px;color:var(--muted)">$3,295 · seats 6</div></button>
+          <button onClick="{{ pickConfig }}" style="font-family:var(--body);text-align:left;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer"><div style="font-size:15px">6 Piece Corner</div><div style="font-size:13px;color:var(--muted)">$3,395 · seats 6</div></button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <div style="display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:6px;background:var(--surface)">
+          <button onClick="{{ dec }}" style="width:36px;height:36px;border:0;background:transparent;border-radius:999px;cursor:pointer;color:var(--ink);font-size:18px;font-family:var(--body)">−</button>
+          <span style="min-width:26px;text-align:center;font-size:16px">{{ qty }}</span>
+          <button onClick="{{ inc }}" style="width:36px;height:36px;border:0;background:transparent;border-radius:999px;cursor:pointer;color:var(--ink);font-size:18px;font-family:var(--body)">+</button>
+        </div>
+        <button style="flex:1;min-width:220px;font-family:var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:17px 28px;font-size:14px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer" style-hover="background:var(--accent);color:var(--accentInk)">Add to Cart — $2,925.00</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+        <div style="display:flex;align-items:center;gap:10px;font-size:14.5px"><i data-lucide="truck" style="width:18px;height:18px;color:var(--accent)"></i>Free shipping, 2–5 days</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14.5px"><i data-lucide="rotate-ccw" style="width:18px;height:18px;color:var(--accent)"></i>30-night home trial</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14.5px"><i data-lucide="shield-check" style="width:18px;height:18px;color:var(--accent)"></i>10-year frame warranty</div>
+      </div>
+
+      <div style="display:grid">
+        <details open="" style="border-bottom:1px solid var(--line);padding:16px 0">
+          <summary style="cursor:pointer;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center">Dimensions &amp; Fit<i data-lucide="chevron-down" style="width:16px;height:16px"></i></summary>
+          <div style="padding-top:14px;color:var(--muted);font-size:15px;line-height:1.7;display:grid;gap:5px"><div>Overall: 132" W × 68" D × 33" H</div><div>Seat height 18" · seat depth 44"</div><div>Ships in 4 boxes, largest 34" × 30" × 26"</div><div>Fits through a standard 30" doorway</div></div>
+        </details>
+        <details style="border-bottom:1px solid var(--line);padding:16px 0">
+          <summary style="cursor:pointer;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center">Materials &amp; Care<i data-lucide="chevron-down" style="width:16px;height:16px"></i></summary>
+          <div style="padding-top:14px;color:var(--muted);font-size:15px;line-height:1.65">Performance polyester blend rated 60,000+ double rubs. Feather-blend top layer over high-resilience foam, kiln-dried hardwood frame. All covers machine wash cold, tumble dry low.</div>
+        </details>
+        <details style="border-bottom:1px solid var(--line);padding:16px 0">
+          <summary style="cursor:pointer;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center">Shipping &amp; Returns<i data-lucide="chevron-down" style="width:16px;height:16px"></i></summary>
+          <div style="padding-top:14px;color:var(--muted);font-size:15px;line-height:1.65">Free curbside shipping across the lower 48, dispatched within 48 hours. Sleep on it for 30 nights; if it is not right we arrange pickup and refund in full.</div>
+        </details>
+        <details style="border-bottom:1px solid var(--line);padding:16px 0">
+          <summary style="cursor:pointer;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center">Assembly<i data-lucide="chevron-down" style="width:16px;height:16px"></i></summary>
+          <div style="padding-top:14px;color:var(--muted);font-size:15px;line-height:1.65">No tools required. Unzip, slide the covers on, press the ModuleLock™ connectors together. Most setups take under 20 minutes with one person.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:88px auto 0;padding:0 24px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px"><i data-lucide="waves" style="width:22px;height:22px;color:var(--accent)"></i><h4 style="font-family:var(--display);font-weight:600;font-size:21px;margin:14px 0 8px">Comfort that holds</h4><p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.6">Feather-blend over a foam core: gives at first touch, still supports you an hour later.</p></div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px"><i data-lucide="washing-machine" style="width:22px;height:22px;color:var(--accent)"></i><h4 style="font-family:var(--display);font-weight:600;font-size:21px;margin:14px 0 8px">Everything washes</h4><p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.6">Seat, back, arm and base covers unzip. Replace one cover instead of the whole couch.</p></div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px"><i data-lucide="blocks" style="width:22px;height:22px;color:var(--accent)"></i><h4 style="font-family:var(--display);font-weight:600;font-size:21px;margin:14px 0 8px">Rearranges with you</h4><p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.6">Hidden connectors lock pieces flush. Add a module later and the layout changes in minutes.</p></div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:88px auto 0;padding:0 24px">
+    <h2 style="font-family:var(--display);font-weight:600;font-size:clamp(28px,3.6vw,42px);margin:0 0 28px">Reviews</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;align-items:start">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:var(--display);font-weight:600;font-size:52px;line-height:1">4.9</span><span style="color:var(--accent);letter-spacing:.12em">★★★★★</span></div>
+        <p style="color:var(--muted);font-size:14.5px;margin:8px 0 20px">Based on 5,250 verified purchases</p>
+        <div style="display:grid;gap:9px;font-size:13.5px">
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;color:var(--muted)">5★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:91%;background:var(--accent)"></span></span><span style="width:36px;text-align:right;color:var(--muted)">91%</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;color:var(--muted)">4★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:6%;background:var(--accent)"></span></span><span style="width:36px;text-align:right;color:var(--muted)">6%</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;color:var(--muted)">3★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:2%;background:var(--accent)"></span></span><span style="width:36px;text-align:right;color:var(--muted)">2%</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;color:var(--muted)">2★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:1%;background:var(--accent)"></span></span><span style="width:36px;text-align:right;color:var(--muted)">1%</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;color:var(--muted)">1★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:0;background:var(--accent)"></span></span><span style="width:36px;text-align:right;color:var(--muted)">0%</span></div>
+        </div>
+      </div>
+      <div style="grid-column:span 2;min-width:0;display:grid;gap:16px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:13px"><span style="padding:8px 14px;border-radius:999px;background:var(--ink);color:var(--bg)">All</span><span style="padding:8px 14px;border-radius:999px;border:1px solid var(--line)">With photos</span><span style="padding:8px 14px;border-radius:999px;border:1px solid var(--line)">Pet owners</span><span style="padding:8px 14px;border-radius:999px;border:1px solid var(--line)">Most recent</span></div>
+        <article style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><div style="display:flex;align-items:center;gap:12px"><span style="width:38px;height:38px;border-radius:999px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px">MR</span><div><div style="font-size:15.5px">Maya R.</div><div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px"><i data-lucide="badge-check" style="width:13px;height:13px"></i>Verified buyer · Austin, TX</div></div></div><span style="color:var(--accent);letter-spacing:.12em">★★★★★</span></div>
+          <h5 style="font-family:var(--display);font-weight:600;font-size:18px;margin:16px 0 8px">Two kids, one dog, still looks new</h5>
+          <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.65">We washed the seat covers twice in the first month and they came out the same. The connectors hold, so there is no gap to fish crumbs out of anymore.</p>
+          <div style="display:flex;gap:10px;margin-top:14px"><div style="width:74px;height:74px;border-radius:10px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div><div style="width:74px;height:74px;border-radius:10px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div></div>
+          <div style="margin-top:14px;font-size:13px;color:var(--muted)">Khaki · 6 Piece “Pit” · 3 weeks ago</div>
+        </article>
+        <article style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><div style="display:flex;align-items:center;gap:12px"><span style="width:38px;height:38px;border-radius:999px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px">DK</span><div><div style="font-size:15.5px">Derek K.</div><div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px"><i data-lucide="badge-check" style="width:13px;height:13px"></i>Verified buyer · Chicago, IL</div></div></div><span style="color:var(--accent);letter-spacing:.12em">★★★★★</span></div>
+          <h5 style="font-family:var(--display);font-weight:600;font-size:18px;margin:16px 0 8px">Third floor walk-up, no problem</h5>
+          <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.65">Four boxes up a narrow stairwell, assembled in about fifteen minutes. I have moved twice since and it went back together both times.</p>
+          <div style="margin-top:14px;font-size:13px;color:var(--muted)">Light Grey · 5 Piece · 1 month ago</div>
+        </article>
+        <article style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center"><div style="display:flex;align-items:center;gap:12px"><span style="width:38px;height:38px;border-radius:999px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px">AL</span><div><div style="font-size:15.5px">Alicia L.</div><div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px"><i data-lucide="badge-check" style="width:13px;height:13px"></i>Verified buyer · Portland, OR</div></div></div><span style="color:var(--accent);letter-spacing:.12em">★★★★☆</span></div>
+          <h5 style="font-family:var(--display);font-weight:600;font-size:18px;margin:16px 0 8px">Deeper than I expected</h5>
+          <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.65">Measure the room first. The 44" seat depth is wonderful for lounging but takes real space. Support sent a layout diagram before I ordered.</p>
+          <div style="margin-top:14px;font-size:13px;color:var(--muted)">White · 6 Piece Corner · 2 months ago</div>
+        </article>
+        <button style="justify-self:start;font-family:var(--body);background:transparent;border:1px solid var(--ink);color:var(--ink);border-radius:999px;padding:14px 26px;font-size:13.5px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Load more reviews</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:88px auto 0;padding:0 24px 96px">
+    <h2 style="font-family:var(--display);font-weight:600;font-size:clamp(26px,3.2vw,36px);margin:0 0 24px">Pairs well with</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden"><div style="aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px)"></div><div style="padding:16px"><div style="font-size:16px">Extra Ottoman</div><div style="color:var(--muted);font-size:14.5px">$495.00</div></div></div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden"><div style="aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px)"></div><div style="padding:16px"><div style="font-size:16px">Replacement Cover Set</div><div style="color:var(--muted);font-size:14.5px">$390.00</div></div></div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden"><div style="aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px)"></div><div style="padding:16px"><div style="font-size:16px">Corner Module</div><div style="color:var(--muted);font-size:14.5px">$650.00</div></div></div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden"><div style="aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px)"></div><div style="padding:16px"><div style="font-size:16px">Fabric Swatch Booklet</div><div style="color:var(--muted);font-size:14.5px">Free</div></div></div>
+    </div>
+  </section>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { qty: 1, color: 'White' };
+  icons() { if (window.lucide) window.lucide.createIcons(); else setTimeout(() => this.icons(), 120); }
+  componentDidMount() { this.icons(); }
+  componentDidUpdate() { this.icons(); }
+  renderVals() {
+    const mark = (e, ring) => {
+      const p = e.currentTarget.parentElement;
+      Array.from(p.children).forEach(c => { c.style.boxShadow = 'none'; c.style.border = '1px solid var(--line)'; });
+      if (ring) e.currentTarget.style.boxShadow = '0 0 0 2px var(--bg),0 0 0 4px var(--ink)';
+      else e.currentTarget.style.border = '2px solid var(--ink)';
+    };
+    return {
+      qty: this.state.qty, color: this.state.color,
+      inc: () => this.setState(s => ({ qty: s.qty + 1 })),
+      dec: () => this.setState(s => ({ qty: Math.max(1, s.qty - 1) })),
+      pickColor: (e) => { mark(e, true); this.setState({ color: e.currentTarget.dataset.name }); },
+      pickConfig: (e) => mark(e, false)
+    };
+  }
+}
+
+</script>
+</body>
+</html>

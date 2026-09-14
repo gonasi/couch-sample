@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Karla:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+--bg:#F7F2EA;--surface:#FFFDF9;--ink:#241C16;--muted:#6E6157;
+--accent:#B4563A;--accentInk:#FFF8F4;--line:#E4DACB;--soft:#EFE7DA;
+--display:'Playfair Display',Georgia,serif;--body:'Karla',system-ui,sans-serif;
+--radius:18px;--dtrack:0em;--dweight:600;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;}
+a{color:var(--ink);text-decoration:none;}
+a:hover{color:var(--accent);}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+</style>
+</helmet>
+
+<div style="background:var(--bg);color:var(--ink);font-family:var(--body);min-height:100vh;overflow-x:hidden">
+
+  <div style="position:fixed;right:16px;bottom:16px;z-index:60;display:flex;gap:6px;padding:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.12)">
+    <button onClick="{{ pickA }}" style="font-family:var(--body);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:0;cursor:pointer;background:transparent;color:var(--ink)" style-hover="background:var(--soft)">Editorial</button>
+    <button onClick="{{ pickB }}" style="font-family:var(--body);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:0;cursor:pointer;background:transparent;color:var(--ink)" style-hover="background:var(--soft)">Modern</button>
+    <button onClick="{{ pickC }}" style="font-family:var(--body);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:0;cursor:pointer;background:transparent;color:var(--ink)" style-hover="background:var(--soft)">Garden</button>
+  </div>
+
+  <div style="background:var(--ink);color:var(--bg);overflow:hidden;white-space:nowrap">
+    <div style="display:flex;width:max-content;animation:ticker 34s linear infinite">
+      <div style="display:flex;align-items:center;gap:64px;padding:11px 32px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase">
+        <span>Up to $2,000 Off (30%) — Ends Soon</span>
+        <span>Khaki and Black are Back with Limited Stock!</span>
+        <span>No sales tax collected at checkout</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:64px;padding:11px 32px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase">
+        <span>Up to $2,000 Off (30%) — Ends Soon</span>
+        <span>Khaki and Black are Back with Limited Stock!</span>
+        <span>No sales tax collected at checkout</span>
+      </div>
+    </div>
+  </div>
+
+  <header style="position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line)">
+    <div style="max-width:1280px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;min-height:72px">
+      <nav style="display:flex;align-items:center;gap:28px;font-size:14px;letter-spacing:.04em;text-transform:uppercase">
+        <a href="#top" onClick="{{ goHome }}">Home</a>
+        <a href="#shop" onClick="{{ goHome }}">Shop</a>
+        <div style="position:relative;display:flex;align-items:center;gap:6px;cursor:pointer;padding:24px 0" style-hover="color:var(--accent)">
+          <span>Support</span>
+          <i data-lucide="chevron-down" style="width:14px;height:14px"></i>
+          <div style="position:absolute;top:100%;left:-20px;min-width:230px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;display:none;box-shadow:0 20px 50px rgba(0,0,0,.1);text-transform:none;letter-spacing:0;font-size:14.5px" style-hover="display:block">
+            <a href="#faq" style="display:block;padding:9px 12px;border-radius:9px" style-hover="background:var(--soft)">FAQs</a>
+            <a href="#faq" style="display:block;padding:9px 12px;border-radius:9px" style-hover="background:var(--soft)">Assembly Instructions</a>
+            <a href="#faq" style="display:block;padding:9px 12px;border-radius:9px" style-hover="background:var(--soft)">Cleaning Guide</a>
+            <a href="#faq" style="display:block;padding:9px 12px;border-radius:9px" style-hover="background:var(--soft)">Size Guide</a>
+            <a href="#faq" style="display:block;padding:9px 12px;border-radius:9px" style-hover="background:var(--soft)">Financing</a>
+            <a href="#faq" style="display:block;padding:9px 12px;border-radius:9px" style-hover="background:var(--soft)">Contact Us</a>
+          </div>
+        </div>
+      </nav>
+      <a href="#top" style="font-family:var(--display);font-weight:var(--dweight);font-size:26px;letter-spacing:.18em">GH2</a>
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:20px;font-size:14px;letter-spacing:.04em;text-transform:uppercase">
+        <a href="#shop" style="display:flex;align-items:center;gap:7px"><i data-lucide="search" style="width:17px;height:17px"></i>Search</a>
+        <a href="#shop" onClick="{{ goCart }}" style="display:flex;align-items:center;gap:7px"><i data-lucide="shopping-bag" style="width:17px;height:17px"></i>Cart
+          <span style="min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--accent);color:var(--accentInk);display:inline-flex;align-items:center;justify-content:center;font-size:12px">{{ cart }}</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <section id="top" style="position:relative;min-height:640px;display:flex;align-items:flex-end;background:var(--soft);overflow:hidden">
+    <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(115deg,var(--line) 0 2px,transparent 2px 16px);opacity:.8"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:flex-end;padding:24px">
+      <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);background:var(--surface);border:1px solid var(--line);padding:10px 18px;border-radius:999px">hero video — living room, 1920×1080</span>
+    </div>
+    <div style="position:relative;width:100%;max-width:1280px;margin:0 auto;padding:0 24px 72px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:32px">
+      <div style="max-width:620px">
+        <h1 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(48px,7vw,92px);line-height:.98;margin:0 0 20px;text-wrap:balance">Luxury You Can <em style="font-style:italic;color:var(--accent)">Feel.</em></h1>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:26px;font-size:15px;color:var(--ink)">
+          <span style="letter-spacing:.12em;color:var(--accent)">★★★★★</span>
+          <span>Rated 4.9 by 5,250+ Reviews</span>
+        </div>
+        <a href="#shop" style="display:inline-block;background:var(--ink);color:var(--bg);padding:17px 34px;border-radius:999px;font-size:15px;letter-spacing:.08em;text-transform:uppercase" style-hover="background:var(--accent);color:var(--accentInk)">Shop Cloud Couches →</a>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <span style="background:var(--surface);border:1px solid var(--line);padding:10px 18px;border-radius:999px;font-size:13px;letter-spacing:.06em;text-transform:uppercase">18 Gift</span>
+        <span style="background:var(--accent);color:var(--accentInk);padding:10px 18px;border-radius:999px;font-size:13px;letter-spacing:.06em;text-transform:uppercase">30% Sale Ends Soon</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="shop" style="max-width:1280px;margin:0 auto;padding:96px 24px 24px">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:44px">
+      <h2 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(34px,4.6vw,58px);line-height:1.02;margin:0">Designed for American Homes.</h2>
+      <a href="#shop" style="font-size:14px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:4px">Shop The Cloud Collection</a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px">
+
+      <article style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column">
+        <div style="position:relative;aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">4-piece pit</span>
+          <div style="position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:6px;align-items:flex-start">
+            <span style="background:var(--ink);color:var(--bg);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">Save $1,000</span>
+            <span style="background:var(--accent);color:var(--accentInk);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">30% off</span>
+          </div>
+        </div>
+        <div style="padding:20px;display:flex;flex-direction:column;gap:14px;flex:1">
+          <h3 onClick="{{ openProduct }}" style="font-family:var(--display);font-weight:var(--dweight);font-size:22px;margin:0;cursor:pointer" style-hover="color:var(--accent)">4 Piece “Pit” Cloud</h3>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span style="font-size:20px">$2,550.00</span>
+            <s style="color:var(--muted);font-size:15px">$3,550.00</s>
+          </div>
+          <div style="display:flex;gap:9px">
+            <button onClick="{{ pickSwatch }}" title="White" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#FAFAF8;cursor:pointer;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)"></button>
+            <button onClick="{{ pickSwatch }}" title="Black" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#22221F;cursor:pointer"></button>
+            <button onClick="{{ pickSwatch }}" title="Light Grey" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#C9C7C1;cursor:pointer"></button>
+            <button onClick="{{ pickSwatch }}" title="Khaki" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#B6A27C;cursor:pointer"></button>
+          </div>
+          <button onClick="{{ addToCart }}" style="margin-top:auto;font-family:var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:14px;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer" style-hover="background:var(--accent);color:var(--accentInk)">Add to Cart</button>
+        </div>
+      </article>
+
+      <article style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column">
+        <div style="position:relative;aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">5-piece cloud</span>
+          <div style="position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:6px;align-items:flex-start">
+            <span style="background:var(--ink);color:var(--bg);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">Save $1,200</span>
+            <span style="background:var(--accent);color:var(--accentInk);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">30% off</span>
+          </div>
+        </div>
+        <div style="padding:20px;display:flex;flex-direction:column;gap:14px;flex:1">
+          <h3 onClick="{{ openProduct }}" style="font-family:var(--display);font-weight:var(--dweight);font-size:22px;margin:0;cursor:pointer" style-hover="color:var(--accent)">5 Piece Cloud</h3>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span style="font-size:20px">$2,925.00</span>
+            <s style="color:var(--muted);font-size:15px">$4,125.00</s>
+          </div>
+          <div style="display:flex;gap:9px">
+            <button onClick="{{ pickSwatch }}" title="White" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#FAFAF8;cursor:pointer;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)"></button>
+            <button onClick="{{ pickSwatch }}" title="Black" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#22221F;cursor:pointer"></button>
+            <button onClick="{{ pickSwatch }}" title="Light Grey" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#C9C7C1;cursor:pointer"></button>
+            <button onClick="{{ pickSwatch }}" title="Khaki" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#B6A27C;cursor:pointer"></button>
+          </div>
+          <button onClick="{{ addToCart }}" style="margin-top:auto;font-family:var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:14px;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer" style-hover="background:var(--accent);color:var(--accentInk)">Add to Cart</button>
+        </div>
+      </article>
+
+      <article style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column">
+        <div style="position:relative;aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">6-piece pit</span>
+          <div style="position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:6px;align-items:flex-start">
+            <span style="background:var(--ink);color:var(--bg);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">Save $1,350</span>
+            <span style="background:var(--accent);color:var(--accentInk);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">30% off</span>
+          </div>
+        </div>
+        <div style="padding:20px;display:flex;flex-direction:column;gap:14px;flex:1">
+          <h3 onClick="{{ openProduct }}" style="font-family:var(--display);font-weight:var(--dweight);font-size:22px;margin:0;cursor:pointer" style-hover="color:var(--accent)">6 Piece "Pit" Cloud</h3>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span style="font-size:20px">$3,295.00</span>
+            <s style="color:var(--muted);font-size:15px">$4,645.00</s>
+          </div>
+          <div style="display:flex;gap:9px">
+            <button onClick="{{ pickSwatch }}" title="White" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#FAFAF8;cursor:pointer;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)"></button>
+            <button onClick="{{ pickSwatch }}" title="Black" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#22221F;cursor:pointer"></button>
+            <button onClick="{{ pickSwatch }}" title="Light Grey" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#C9C7C1;cursor:pointer"></button>
+            <button onClick="{{ pickSwatch }}" title="Khaki" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#B6A27C;cursor:pointer"></button>
+          </div>
+          <button onClick="{{ addToCart }}" style="margin-top:auto;font-family:var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:14px;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer" style-hover="background:var(--accent);color:var(--accentInk)">Add to Cart</button>
+        </div>
+      </article>
+
+      <article style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column">
+        <div style="position:relative;aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">6-piece corner</span>
+          <div style="position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:6px;align-items:flex-start">
+            <span style="background:var(--ink);color:var(--bg);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">Save $1,400</span>
+            <span style="background:var(--accent);color:var(--accentInk);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">30% off</span>
+          </div>
+        </div>
+        <div style="padding:20px;display:flex;flex-direction:column;gap:14px;flex:1">
+          <h3 onClick="{{ openProduct }}" style="font-family:var(--display);font-weight:var(--dweight);font-size:22px;margin:0;cursor:pointer" style-hover="color:var(--accent)">6 Piece Corner "Pit" Cloud</h3>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span style="font-size:20px">$3,395.00</span>
+            <s style="color:var(--muted);font-size:15px">$4,795.00</s>
+          </div>
+          <div style="display:flex;gap:9px">
+            <button onClick="{{ pickSwatch }}" title="White" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#FAFAF8;cursor:pointer;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)"></button>
+            <button onClick="{{ pickSwatch }}" title="Black" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#22221F;cursor:pointer"></button>
+            <button onClick="{{ pickSwatch }}" title="Light Grey" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#C9C7C1;cursor:pointer"></button>
+            <button onClick="{{ pickSwatch }}" title="Khaki" style="width:24px;height:24px;border-radius:999px;border:1px solid var(--line);background:#B6A27C;cursor:pointer"></button>
+          </div>
+          <button onClick="{{ addToCart }}" style="margin-top:auto;font-family:var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:14px;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer" style-hover="background:var(--accent);color:var(--accentInk)">Add to Cart</button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:0 auto;padding:88px 24px 0">
+    <h2 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(30px,4vw,50px);margin:0 0 8px">Real Homes. Real Comfort.</h2>
+    <p style="color:var(--muted);font-size:17px;margin:0 0 28px">See how customers are transforming their spaces with GH2.</p>
+    <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,240px);gap:16px;overflow-x:auto;padding-bottom:14px">
+      <div style="aspect-ratio:9/16;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(120deg,var(--line) 0 2px,transparent 2px 15px);display:flex;align-items:flex-end;padding:14px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">ugc clip 01</span></div>
+      <div style="aspect-ratio:9/16;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(120deg,var(--line) 0 2px,transparent 2px 15px);display:flex;align-items:flex-end;padding:14px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">ugc clip 02</span></div>
+      <div style="aspect-ratio:9/16;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(120deg,var(--line) 0 2px,transparent 2px 15px);display:flex;align-items:flex-end;padding:14px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">ugc clip 03</span></div>
+      <div style="aspect-ratio:9/16;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(120deg,var(--line) 0 2px,transparent 2px 15px);display:flex;align-items:flex-end;padding:14px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">ugc clip 04</span></div>
+      <div style="aspect-ratio:9/16;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(120deg,var(--line) 0 2px,transparent 2px 15px);display:flex;align-items:flex-end;padding:14px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">ugc clip 05</span></div>
+      <div style="aspect-ratio:9/16;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(120deg,var(--line) 0 2px,transparent 2px 15px);display:flex;align-items:flex-end;padding:14px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">ugc clip 06</span></div>
+    </div>
+  </section>
+
+  <section style="margin-top:72px;background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div style="max-width:1280px;margin:0 auto;padding:44px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:32px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--soft);display:flex;align-items:center;justify-content:center"><i data-lucide="paw-print" style="width:19px;height:19px;color:var(--accent)"></i></div>
+        <strong style="font-size:16px;font-weight:600">Pet-Friendly Fabric</strong>
+        <span style="color:var(--muted);font-size:15px">Handles claws and fur with ease.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--soft);display:flex;align-items:center;justify-content:center"><i data-lucide="shield-check" style="width:19px;height:19px;color:var(--accent)"></i></div>
+        <strong style="font-size:16px;font-weight:600">Resists Daily Wear</strong>
+        <span style="color:var(--muted);font-size:15px">Built with a 60,000+ double rub rating.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--soft);display:flex;align-items:center;justify-content:center"><i data-lucide="blocks" style="width:19px;height:19px;color:var(--accent)"></i></div>
+        <strong style="font-size:16px;font-weight:600">Modular &amp; Secure</strong>
+        <span style="color:var(--muted);font-size:15px">Hidden connectors prevent sliding and gaps.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--soft);display:flex;align-items:center;justify-content:center"><i data-lucide="leaf" style="width:19px;height:19px;color:var(--accent)"></i></div>
+        <strong style="font-size:16px;font-weight:600">Non-Toxic Materials</strong>
+        <span style="color:var(--muted);font-size:15px">Safe for your home and family.</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:96px 24px 0;display:flex;flex-direction:column;gap:72px">
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+      <div style="aspect-ratio:4/3;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">washable covers</span></div>
+      <div>
+        <h3 style="font-family:var(--display);font-weight:var(--dweight);font-size:clamp(26px,3.2vw,40px);margin:0 0 16px;line-height:1.08">No More Stress Over Spills</h3>
+        <p style="color:var(--muted);font-size:17px;line-height:1.6;margin:0 0 14px;text-wrap:pretty">Life happens... spills, crumbs, paw prints. Everyday use can leave your couch looking worn, stained, and harder to keep clean.</p>
+        <p style="font-size:17px;line-height:1.6;margin:0;text-wrap:pretty">Our removable and machine washable covers make cleanup easy and keep your couch looking fresh every day. Even the base covers are removable!</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+      <div style="order:2">
+        <h3 style="font-family:var(--display);font-weight:var(--dweight);font-size:clamp(26px,3.2vw,40px);margin:0 0 16px;line-height:1.08">Tired of uncomfortable couches?</h3>
+        <p style="color:var(--muted);font-size:17px;line-height:1.6;margin:0 0 14px;text-wrap:pretty">Most couches look good, but don’t feel good. They flatten, shift, and lose comfort.</p>
+        <p style="font-size:17px;line-height:1.6;margin:0;text-wrap:pretty">The GH2 Cloud Couch features a plush feather-blend top layered over a supportive foam core, creating deep comfort that stays supportive.</p>
+      </div>
+      <div style="order:1;aspect-ratio:4/3;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">cushion cutaway</span></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+      <div style="aspect-ratio:4/3;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">boxes in doorway</span></div>
+      <div>
+        <h3 style="font-family:var(--display);font-weight:var(--dweight);font-size:clamp(26px,3.2vw,40px);margin:0 0 16px;line-height:1.08">Fits Where Other Couches Don’t</h3>
+        <p style="color:var(--muted);font-size:17px;line-height:1.6;margin:0 0 14px;text-wrap:pretty">Struggling to move your couch through tight doorways, narrow hallways, or awkward spaces?</p>
+        <p style="font-size:17px;line-height:1.6;margin:0;text-wrap:pretty">Our modular pieces come in boxes that fit through any home and assemble with ease. Move, rearrange, or expand anytime, your couch adapts to your space.</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+      <div style="order:2">
+        <h3 style="font-family:var(--display);font-weight:var(--dweight);font-size:clamp(26px,3.2vw,40px);margin:0 0 16px;line-height:1.08">No Sliding. No Gaps.</h3>
+        <p style="color:var(--muted);font-size:17px;line-height:1.6;margin:0 0 14px;text-wrap:pretty">There’s nothing worse than cushions shifting and gaps forming every time you sit down.</p>
+        <p style="font-size:17px;line-height:1.6;margin:0;text-wrap:pretty">The ModuleLock™ System locks each piece in place, keeping your couch tight, stable, and gap-free.</p>
+      </div>
+      <div style="order:1;aspect-ratio:4/3;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">connector detail</span></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+      <div style="aspect-ratio:4/3;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">storage ottoman</span></div>
+      <div>
+        <h3 style="font-family:var(--display);font-weight:var(--dweight);font-size:clamp(26px,3.2vw,40px);margin:0 0 16px;line-height:1.08">Hide the Mess Instantly</h3>
+        <p style="color:var(--muted);font-size:17px;line-height:1.6;margin:0 0 14px;text-wrap:pretty">Tired of clutter taking over your couch and living space?</p>
+        <p style="font-size:17px;line-height:1.6;margin:0;text-wrap:pretty">Effortlessly store blankets, pillows, and everyday items inside the ottoman! Everything stays neatly organized, hidden, and within reach</p>
+      </div>
+    </div>
+
+  </section>
+
+  <section style="max-width:1000px;margin:96px auto 0;padding:0 24px">
+    <h2 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(28px,3.8vw,46px);margin:0 0 32px;text-align:center">Why Customers Love the GH2 Cloud Couch</h2>
+    <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden">
+      <div style="display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line);background:var(--soft)">
+        <span></span>
+        <strong style="text-align:center;font-family:var(--display);font-weight:var(--dweight);font-size:17px">GH2 Cloud</strong>
+        <strong style="text-align:center;font-size:15px;color:var(--muted);font-weight:500">RH®</strong>
+        <strong style="text-align:center;font-size:15px;color:var(--muted);font-weight:500">Other Clouds</strong>
+      </div>
+      <div style="display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)"><span style="font-size:16px">Deep Comfort &amp; Supportive</span><span style="text-align:center;color:var(--accent)">✓</span><span style="text-align:center;color:var(--muted)">✓</span><span style="text-align:center;color:var(--muted)">—</span></div>
+      <div style="display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)"><span style="font-size:16px">Fully Washable Covers</span><span style="text-align:center;color:var(--accent)">✓</span><span style="text-align:center;color:var(--muted)">—</span><span style="text-align:center;color:var(--muted)">—</span></div>
+      <div style="display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)"><span style="font-size:16px">ModuleLock Connectors</span><span style="text-align:center;color:var(--accent)">✓</span><span style="text-align:center;color:var(--muted)">—</span><span style="text-align:center;color:var(--muted)">—</span></div>
+      <div style="display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)"><span style="font-size:16px">Pet Friendly Fabric</span><span style="text-align:center;color:var(--accent)">✓</span><span style="text-align:center;color:var(--muted)">✓</span><span style="text-align:center;color:var(--muted)">—</span></div>
+      <div style="display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)"><span style="font-size:16px">Fast &amp; Free Shipping</span><span style="text-align:center;color:var(--accent)">✓</span><span style="text-align:center;color:var(--muted)">—</span><span style="text-align:center;color:var(--muted)">✓</span></div>
+      <div style="display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)"><span style="font-size:16px">Built to Last Structure</span><span style="text-align:center;color:var(--accent)">✓</span><span style="text-align:center;color:var(--muted)">✓</span><span style="text-align:center;color:var(--muted)">—</span></div>
+      <div style="display:grid;grid-template-columns:1.6fr .8fr .8fr .8fr;align-items:center;padding:16px 20px"><span style="font-size:16px">24/7 Customer Support</span><span style="text-align:center;color:var(--accent)">✓</span><span style="text-align:center;color:var(--muted)">—</span><span style="text-align:center;color:var(--muted)">—</span></div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:96px auto 0;padding:0 24px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px">
+      <div style="aspect-ratio:4/3;border-radius:14px;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">5-piece in living room</span></div>
+      <div>
+        <h3 style="font-family:var(--display);font-weight:var(--dweight);font-size:clamp(26px,3.2vw,42px);margin:0 0 24px;line-height:1.08">The Last Couch You’ll Ever Need</h3>
+        <div style="display:grid;gap:16px;margin-bottom:28px">
+          <div style="display:flex;align-items:center;gap:14px"><span style="width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--soft);flex:none;display:flex;align-items:center;justify-content:center"><i data-lucide="refresh-cw" style="width:17px;height:17px;color:var(--accent)"></i></span><span style="font-size:16.5px">Refresh Anytime and Replace Covers</span></div>
+          <div style="display:flex;align-items:center;gap:14px"><span style="width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--soft);flex:none;display:flex;align-items:center;justify-content:center"><i data-lucide="plus" style="width:17px;height:17px;color:var(--accent)"></i></span><span style="font-size:16.5px">Buy Extra Pieces to Expand Your Setup</span></div>
+          <div style="display:flex;align-items:center;gap:14px"><span style="width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--soft);flex:none;display:flex;align-items:center;justify-content:center"><i data-lucide="hammer" style="width:17px;height:17px;color:var(--accent)"></i></span><span style="font-size:16.5px">Durable Structure that's Build to Last</span></div>
+          <div style="display:flex;align-items:center;gap:14px"><span style="width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--soft);flex:none;display:flex;align-items:center;justify-content:center"><i data-lucide="move" style="width:17px;height:17px;color:var(--accent)"></i></span><span style="font-size:16.5px">Moves with You, Easy to Rearrange</span></div>
+        </div>
+        <a href="#shop" style="display:inline-block;background:var(--ink);color:var(--bg);padding:16px 30px;border-radius:999px;font-size:14px;letter-spacing:.08em;text-transform:uppercase" style-hover="background:var(--accent);color:var(--accentInk)">Build Your Setup for Life</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:72px auto 0;padding:0 24px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+      <div style="order:2">
+        <span style="font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">The Pit Cloud</span>
+        <h3 style="font-family:var(--display);font-weight:var(--dweight);font-size:clamp(26px,3.4vw,44px);margin:10px 0 16px;line-height:1.08">Designed for Ultimate Comfort</h3>
+        <p style="color:var(--muted);font-size:17px;line-height:1.6;margin:0 0 26px;text-wrap:pretty">Sink into oversized seats designed for true lounging. Perfect for movie nights, slow Sundays, and full body relaxation. This is the configuration everyone upgrades to.</p>
+        <a href="#shop" style="display:inline-block;border:1px solid var(--ink);padding:15px 28px;border-radius:999px;font-size:14px;letter-spacing:.08em;text-transform:uppercase" style-hover="background:var(--ink);color:var(--bg)">Shop the 6 Piece</a>
+      </div>
+      <div style="order:1;aspect-ratio:3/2;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">6-piece pit, wide shot</span></div>
+    </div>
+  </section>
+
+  <section style="margin:96px 0 0;position:relative;min-height:460px;display:flex;align-items:center;justify-content:center;background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden">
+    <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(115deg,var(--line) 0 2px,transparent 2px 16px)"></div>
+    <div style="position:relative;text-align:center;padding:40px 24px">
+      <h2 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(34px,5.5vw,68px);margin:0 0 24px">Feel The Comfort</h2>
+      <a href="#shop" style="display:inline-block;background:var(--accent);color:var(--accentInk);padding:17px 34px;border-radius:999px;font-size:15px;letter-spacing:.08em;text-transform:uppercase" style-hover="background:var(--ink);color:var(--bg)">Experience The Cloud →</a>
+    </div>
+  </section>
+
+  </sc-if>
+
+  <sc-if value="{{ isProduct }}">
+  <div style="max-width:1280px;margin:0 auto;padding:28px 24px 0;font-size:13.5px;letter-spacing:.04em;color:var(--muted);display:flex;gap:8px">
+    <a href="#top" onClick="{{ goHome }}">Home</a><span>/</span><a href="#shop" onClick="{{ goHome }}">Shop</a><span>/</span><span style="color:var(--ink)">{{ pName }}</span>
+  </div>
+
+  <section style="max-width:1280px;margin:0 auto;padding:24px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:start">
+    <div style="display:grid;gap:12px;position:sticky;top:96px">
+      <div style="aspect-ratio:4/3;border-radius:var(--radius);border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:center"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">product hero</span></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div style="aspect-ratio:1;border-radius:12px;border:2px solid var(--ink);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+        <div style="aspect-ratio:1;border-radius:12px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+        <div style="aspect-ratio:1;border-radius:12px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+        <div style="aspect-ratio:1;border-radius:12px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px);display:flex;align-items:center;justify-content:center"><i data-lucide="play" style="width:18px;height:18px;color:var(--muted)"></i></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <div>
+        <span style="font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Cloud Collection</span>
+        <h1 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(30px,4vw,48px);line-height:1.05;margin:10px 0 12px">{{ pName }}</h1>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14.5px"><span style="letter-spacing:.12em;color:var(--accent)">★★★★★</span><span>4.9</span><span style="color:var(--muted)">· 5,250+ reviews</span></div>
+      </div>
+
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span style="font-family:var(--display);font-weight:var(--dweight);font-size:34px">{{ pPrice }}</span>
+        <s style="color:var(--muted);font-size:17px">{{ pCompare }}</s>
+        <span style="background:var(--accent);color:var(--accentInk);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px">30% off</span>
+      </div>
+      <p style="margin:-10px 0 0;font-size:14.5px;color:var(--muted)">or 4 interest-free payments of {{ pSplit }} with financing. No sales tax collected at checkout.</p>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px"><span>Color</span><span style="color:var(--muted);letter-spacing:0;text-transform:none">{{ color }}</span></div>
+        <div style="display:flex;gap:12px">
+          <button onClick="{{ pickColor }}" data-name="White" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:#FAFAF8;cursor:pointer;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)"></button>
+          <button onClick="{{ pickColor }}" data-name="Black" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:#22221F;cursor:pointer"></button>
+          <button onClick="{{ pickColor }}" data-name="Light Grey" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:#C9C7C1;cursor:pointer"></button>
+          <button onClick="{{ pickColor }}" data-name="Khaki" style="width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:#B6A27C;cursor:pointer"></button>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">Configuration</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+          <button onClick="{{ pickConfig }}" data-name="4 Piece “Pit” Cloud" data-price="$2,550.00" data-compare="$3,550.00" style="font-family:var(--body);text-align:left;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer" style-hover="border-color:var(--ink)"><div style="font-size:15px">4 Piece “Pit”</div><div style="font-size:13px;color:var(--muted)">$2,550 · seats 4</div></button>
+          <button onClick="{{ pickConfig }}" data-name="5 Piece Cloud" data-price="$2,925.00" data-compare="$4,125.00" style="font-family:var(--body);text-align:left;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer" style-hover="border-color:var(--ink)"><div style="font-size:15px">5 Piece</div><div style="font-size:13px;color:var(--muted)">$2,925 · seats 5</div></button>
+          <button onClick="{{ pickConfig }}" data-name="6 Piece &quot;Pit&quot; Cloud" data-price="$3,295.00" data-compare="$4,645.00" style="font-family:var(--body);text-align:left;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer" style-hover="border-color:var(--ink)"><div style="font-size:15px">6 Piece “Pit”</div><div style="font-size:13px;color:var(--muted)">$3,295 · seats 6</div></button>
+          <button onClick="{{ pickConfig }}" data-name="6 Piece Corner &quot;Pit&quot; Cloud" data-price="$3,395.00" data-compare="$4,795.00" style="font-family:var(--body);text-align:left;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer" style-hover="border-color:var(--ink)"><div style="font-size:15px">6 Piece Corner</div><div style="font-size:13px;color:var(--muted)">$3,395 · seats 6</div></button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <div style="display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:6px;background:var(--surface)">
+          <button onClick="{{ decQty }}" style="width:36px;height:36px;border:0;background:transparent;border-radius:999px;cursor:pointer;color:var(--ink);font-size:18px;font-family:var(--body)" style-hover="background:var(--soft)">−</button>
+          <span style="min-width:26px;text-align:center;font-size:16px">{{ qty }}</span>
+          <button onClick="{{ incQty }}" style="width:36px;height:36px;border:0;background:transparent;border-radius:999px;cursor:pointer;color:var(--ink);font-size:18px;font-family:var(--body)" style-hover="background:var(--soft)">+</button>
+        </div>
+        <button onClick="{{ addCurrent }}" style="flex:1;min-width:220px;font-family:var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:17px 28px;font-size:14px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer" style-hover="background:var(--accent);color:var(--accentInk)">Add to Cart — {{ pPrice }}</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+        <div style="display:flex;align-items:center;gap:10px;font-size:14.5px"><i data-lucide="truck" style="width:18px;height:18px;color:var(--accent)"></i>Free shipping, 2–5 days</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14.5px"><i data-lucide="rotate-ccw" style="width:18px;height:18px;color:var(--accent)"></i>30-night home trial</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14.5px"><i data-lucide="shield-check" style="width:18px;height:18px;color:var(--accent)"></i>10-year frame warranty</div>
+      </div>
+
+      <div style="display:grid">
+        <details style="border-bottom:1px solid var(--line);padding:16px 0">
+          <summary style="cursor:pointer;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center">Dimensions &amp; Fit<i data-lucide="plus" style="width:16px;height:16px"></i></summary>
+          <div style="padding-top:14px;color:var(--muted);font-size:15px;line-height:1.65;display:grid;gap:6px">
+            <div>Overall: 132" W × 68" D × 33" H</div>
+            <div>Seat height: 18" · Seat depth: 44"</div>
+            <div>Ships in 4 boxes, largest 34" × 30" × 26"</div>
+            <div>Fits through a standard 30" doorway</div>
+          </div>
+        </details>
+        <details style="border-bottom:1px solid var(--line);padding:16px 0">
+          <summary style="cursor:pointer;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center">Materials &amp; Care<i data-lucide="plus" style="width:16px;height:16px"></i></summary>
+          <div style="padding-top:14px;color:var(--muted);font-size:15px;line-height:1.65">Performance polyester blend rated 60,000+ double rubs. Feather-blend top layer over high-resilience foam core, kiln-dried hardwood frame. All covers, including base covers, are removable and machine washable cold, tumble dry low.</div>
+        </details>
+        <details style="border-bottom:1px solid var(--line);padding:16px 0">
+          <summary style="cursor:pointer;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center">Shipping &amp; Returns<i data-lucide="plus" style="width:16px;height:16px"></i></summary>
+          <div style="padding-top:14px;color:var(--muted);font-size:15px;line-height:1.65">Free curbside shipping across the lower 48. Orders ship within 48 hours and arrive in 2–5 business days. Sleep on it for 30 nights; if it is not right, we arrange pickup and refund in full.</div>
+        </details>
+        <details style="border-bottom:1px solid var(--line);padding:16px 0">
+          <summary style="cursor:pointer;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center">Assembly<i data-lucide="plus" style="width:16px;height:16px"></i></summary>
+          <div style="padding-top:14px;color:var(--muted);font-size:15px;line-height:1.65">No tools required. Unzip, slide covers on, and press the ModuleLock™ connectors together. Most setups take under 20 minutes with one person.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:88px auto 0;padding:0 24px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px">
+        <i data-lucide="waves" style="width:22px;height:22px;color:var(--accent)"></i>
+        <h4 style="font-family:var(--display);font-weight:var(--dweight);font-size:21px;margin:14px 0 8px">Comfort that holds</h4>
+        <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.6">A feather-blend top layer sits over a foam core, so the seat gives at first touch and still supports you an hour later.</p>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px">
+        <i data-lucide="washing-machine" style="width:22px;height:22px;color:var(--accent)"></i>
+        <h4 style="font-family:var(--display);font-weight:var(--dweight);font-size:21px;margin:14px 0 8px">Everything washes</h4>
+        <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.6">Seat, back, arm and base covers all unzip and go in the machine. Replace a single cover instead of the whole couch.</p>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px">
+        <i data-lucide="blocks" style="width:22px;height:22px;color:var(--accent)"></i>
+        <h4 style="font-family:var(--display);font-weight:var(--dweight);font-size:21px;margin:14px 0 8px">Rearranges with you</h4>
+        <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.6">Hidden connectors lock pieces flush. Add an ottoman or corner later and the layout changes in minutes.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:88px auto 0;padding:0 24px">
+    <h2 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(28px,3.6vw,44px);margin:0 0 28px">Reviews</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:36px;align-items:start">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px">
+        <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:var(--display);font-weight:var(--dweight);font-size:52px;line-height:1">4.9</span><span style="color:var(--accent);letter-spacing:.12em">★★★★★</span></div>
+        <p style="color:var(--muted);font-size:14.5px;margin:8px 0 20px">Based on 5,250 verified purchases</p>
+        <div style="display:grid;gap:9px;font-size:13.5px">
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:30px;color:var(--muted)">5★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:91%;background:var(--accent)"></span></span><span style="width:40px;text-align:right;color:var(--muted)">91%</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:30px;color:var(--muted)">4★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:6%;background:var(--accent)"></span></span><span style="width:40px;text-align:right;color:var(--muted)">6%</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:30px;color:var(--muted)">3★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:2%;background:var(--accent)"></span></span><span style="width:40px;text-align:right;color:var(--muted)">2%</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:30px;color:var(--muted)">2★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:1%;background:var(--accent)"></span></span><span style="width:40px;text-align:right;color:var(--muted)">1%</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:30px;color:var(--muted)">1★</span><span style="flex:1;height:7px;border-radius:999px;background:var(--soft);overflow:hidden"><span style="display:block;height:100%;width:0%;background:var(--accent)"></span></span><span style="width:40px;text-align:right;color:var(--muted)">0%</span></div>
+        </div>
+        <div style="display:grid;gap:8px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)">
+          <div style="display:flex;justify-content:space-between"><span>Comfort</span><span style="color:var(--ink)">4.9</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Ease of assembly</span><span style="color:var(--ink)">4.8</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Value</span><span style="color:var(--ink)">4.7</span></div>
+        </div>
+      </div>
+
+      <div style="grid-column:span 2;min-width:0;display:grid;gap:16px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:13px">
+          <span style="padding:8px 14px;border-radius:999px;background:var(--ink);color:var(--bg)">All</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid var(--line)">With photos</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid var(--line)">Pet owners</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid var(--line)">Small spaces</span>
+          <span style="padding:8px 14px;border-radius:999px;border:1px solid var(--line)">Most recent</span>
+        </div>
+
+        <article style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px">
+          <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center">
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:38px;height:38px;border-radius:999px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px">MR</span><div><div style="font-size:15.5px">Maya R.</div><div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px"><i data-lucide="badge-check" style="width:13px;height:13px"></i>Verified buyer · Austin, TX</div></div></div>
+            <span style="color:var(--accent);letter-spacing:.12em">★★★★★</span>
+          </div>
+          <h5 style="font-family:var(--display);font-weight:var(--dweight);font-size:18px;margin:16px 0 8px">Two kids, one dog, still looks new</h5>
+          <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.65">We washed the seat covers twice in the first month and they came out exactly the same. The connectors hold — no gap to fish crumbs out of anymore.</p>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <div style="width:74px;height:74px;border-radius:10px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+            <div style="width:74px;height:74px;border-radius:10px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+          </div>
+          <div style="margin-top:14px;font-size:13px;color:var(--muted)">Khaki · 6 Piece “Pit” · 3 weeks ago</div>
+        </article>
+
+        <article style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px">
+          <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center">
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:38px;height:38px;border-radius:999px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px">DK</span><div><div style="font-size:15.5px">Derek K.</div><div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px"><i data-lucide="badge-check" style="width:13px;height:13px"></i>Verified buyer · Chicago, IL</div></div></div>
+            <span style="color:var(--accent);letter-spacing:.12em">★★★★★</span>
+          </div>
+          <h5 style="font-family:var(--display);font-weight:var(--dweight);font-size:18px;margin:16px 0 8px">Third floor walk-up, no problem</h5>
+          <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.65">Four boxes up a narrow stairwell, assembled in about fifteen minutes. I have moved apartments twice since and it went right back together both times.</p>
+          <div style="margin-top:14px;font-size:13px;color:var(--muted)">Light Grey · 5 Piece · 1 month ago</div>
+        </article>
+
+        <article style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px">
+          <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center">
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:38px;height:38px;border-radius:999px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px">AL</span><div><div style="font-size:15.5px">Alicia L.</div><div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px"><i data-lucide="badge-check" style="width:13px;height:13px"></i>Verified buyer · Portland, OR</div></div></div>
+            <span style="color:var(--accent);letter-spacing:.12em">★★★★☆</span>
+          </div>
+          <h5 style="font-family:var(--display);font-weight:var(--dweight);font-size:18px;margin:16px 0 8px">Deeper than I expected</h5>
+          <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.65">Measure your room first. The 44" seat depth is wonderful for lounging but it takes real space. Support sent a layout diagram before I ordered, which helped.</p>
+          <div style="margin-top:14px;font-size:13px;color:var(--muted)">White · 6 Piece Corner · 2 months ago</div>
+        </article>
+
+        <article style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px">
+          <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center">
+            <div style="display:flex;align-items:center;gap:12px"><span style="width:38px;height:38px;border-radius:999px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:14px">JP</span><div><div style="font-size:15.5px">Jordan P.</div><div style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px"><i data-lucide="badge-check" style="width:13px;height:13px"></i>Verified buyer · Nashville, TN</div></div></div>
+            <span style="color:var(--accent);letter-spacing:.12em">★★★★★</span>
+          </div>
+          <h5 style="font-family:var(--display);font-weight:var(--dweight);font-size:18px;margin:16px 0 8px">The ottoman storage sold me</h5>
+          <p style="margin:0;color:var(--muted);font-size:15.5px;line-height:1.65">Blankets and controllers live inside it now. Living room finally looks put together at the end of the day without any actual tidying.</p>
+          <div style="margin-top:14px;font-size:13px;color:var(--muted)">Black · 4 Piece “Pit” · 2 months ago</div>
+        </article>
+
+        <button style="justify-self:start;font-family:var(--body);background:transparent;border:1px solid var(--ink);color:var(--ink);border-radius:999px;padding:14px 26px;font-size:13.5px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer" style-hover="background:var(--ink);color:var(--bg)">Load more reviews</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:88px auto 0;padding:0 24px 24px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:24px">
+      <h2 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(26px,3.2vw,38px);margin:0">Pairs well with</h2>
+      <a href="#shop" onClick="{{ goHome }}" style="font-size:14px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:4px">Shop all</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden"><div style="aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px)"></div><div style="padding:16px"><div style="font-size:16px">Extra Ottoman</div><div style="color:var(--muted);font-size:14.5px">$495.00</div></div></div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden"><div style="aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px)"></div><div style="padding:16px"><div style="font-size:16px">Replacement Cover Set</div><div style="color:var(--muted);font-size:14.5px">$390.00</div></div></div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden"><div style="aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px)"></div><div style="padding:16px"><div style="font-size:16px">Corner Module</div><div style="color:var(--muted);font-size:14.5px">$650.00</div></div></div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden"><div style="aspect-ratio:4/3;background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 14px)"></div><div style="padding:16px"><div style="font-size:16px">Fabric Swatch Booklet</div><div style="color:var(--muted);font-size:14.5px">Free</div></div></div>
+    </div>
+  </section>
+  </sc-if>
+
+  <sc-if value="{{ isCart }}">
+  <section style="max-width:1180px;margin:0 auto;padding:48px 24px 24px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:32px">
+      <h1 style="font-family:var(--display);font-weight:var(--dweight);letter-spacing:var(--dtrack);font-size:clamp(32px,4.4vw,52px);margin:0">Your Cart</h1>
+      <a href="#shop" onClick="{{ goHome }}" style="font-size:14px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:4px">Continue shopping</a>
+    </div>
+
+    <sc-if value="{{ cartEmpty }}">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:72px 24px;text-align:center">
+        <i data-lucide="shopping-bag" style="width:28px;height:28px;color:var(--muted)"></i>
+        <p style="font-size:18px;margin:16px 0 22px">Your cart is currently empty.</p>
+        <a href="#shop" onClick="{{ goHome }}" style="display:inline-block;background:var(--ink);color:var(--bg);padding:15px 30px;border-radius:999px;font-size:14px;letter-spacing:.08em;text-transform:uppercase">Start Shopping</a>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ cartHasItems }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;align-items:start">
+      <div style="grid-column:span 2;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden">
+        <sc-for list="{{ cartItems }}" as="item" hint-placeholder-count="2">
+          <div style="display:flex;gap:18px;padding:20px;border-bottom:1px solid var(--line);flex-wrap:wrap">
+            <div style="width:120px;height:96px;flex:none;border-radius:12px;border:1px solid var(--line);background-image:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 12px)"></div>
+            <div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:6px">
+              <div style="font-family:var(--display);font-weight:var(--dweight);font-size:19px">{{ item.name }}</div>
+              <div style="color:var(--muted);font-size:14.5px">Color: {{ item.color }}</div>
+              <div style="color:var(--muted);font-size:14.5px">Ships in 2–5 business days</div>
+              <button onClick="{{ item.remove }}" style="align-self:flex-start;margin-top:4px;font-family:var(--body);background:transparent;border:0;padding:0;color:var(--muted);font-size:13.5px;text-decoration:underline;cursor:pointer">Remove</button>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+              <div style="display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:4px">
+                <button onClick="{{ item.dec }}" style="width:30px;height:30px;border:0;background:transparent;border-radius:999px;cursor:pointer;color:var(--ink);font-family:var(--body)">−</button>
+                <span style="min-width:22px;text-align:center;font-size:15px">{{ item.qty }}</span>
+                <button onClick="{{ item.inc }}" style="width:30px;height:30px;border:0;background:transparent;border-radius:999px;cursor:pointer;color:var(--ink);font-family:var(--body)">+</button>
+              </div>
+              <div style="font-size:18px">{{ item.total }}</div>
+              <s style="color:var(--muted);font-size:14px">{{ item.compareTotal }}</s>
+            </div>
+          </div>
+        </sc-for>
+        <div style="padding:18px 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:14.5px">
+          <i data-lucide="tag" style="width:16px;height:16px;color:var(--accent)"></i>Discount CLOUD30 applied automatically at checkout.
+        </div>
+      </div>
+
+      <aside style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;position:sticky;top:96px;display:grid;gap:14px">
+        <h3 style="font-family:var(--display);font-weight:var(--dweight);font-size:22px;margin:0 0 4px">Order Summary</h3>
+        <div style="display:flex;justify-content:space-between;font-size:15.5px"><span style="color:var(--muted)">Subtotal ({{ count }} items)</span><span>{{ subtotal }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:15.5px"><span style="color:var(--muted)">Sale savings</span><span style="color:var(--accent)">−{{ savings }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:15.5px"><span style="color:var(--muted)">Shipping</span><span>Free</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:15.5px"><span style="color:var(--muted)">Sales tax</span><span>Not collected</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;border-top:1px solid var(--line);font-size:16px"><span>Total</span><span style="font-family:var(--display);font-weight:var(--dweight);font-size:28px">{{ subtotal }}</span></div>
+        <form onSubmit="{{ noSubmit }}" style="display:flex;gap:8px;margin-top:4px">
+          <input type="text" placeholder="Discount code" style="flex:1;min-width:0;font-family:var(--body);font-size:14px;padding:12px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink)" />
+          <button type="submit" style="font-family:var(--body);font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:12px 18px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer">Apply</button>
+        </form>
+        <button style="font-family:var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:17px;font-size:14px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer" style-hover="background:var(--accent);color:var(--accentInk)">Checkout</button>
+        <div style="display:grid;gap:9px;font-size:14px;color:var(--muted);margin-top:6px">
+          <span style="display:flex;align-items:center;gap:9px"><i data-lucide="lock" style="width:15px;height:15px"></i>Secure encrypted checkout</span>
+          <span style="display:flex;align-items:center;gap:9px"><i data-lucide="credit-card" style="width:15px;height:15px"></i>4 interest-free payments available</span>
+          <span style="display:flex;align-items:center;gap:9px"><i data-lucide="rotate-ccw" style="width:15px;height:15px"></i>30-night trial, free returns</span>
+        </div>
+      </aside>
+    </div>
+    </sc-if>
+  </section>
+  </sc-if>
+
+  <footer id="faq" style="background:var(--ink);color:var(--bg);margin-top:0">
+    <div style="max-width:1280px;margin:0 auto;padding:72px 24px 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px">
+      <div>
+        <h4 style="font-family:var(--display);font-weight:var(--dweight);font-size:19px;margin:0 0 16px">Need Help?</h4>
+        <div style="display:grid;gap:10px;font-size:15px;opacity:.85">
+          <a href="#faq" style-hover="opacity:.6" style="color:var(--bg);display:flex;align-items:center;gap:9px"><i data-lucide="phone" style="width:16px;height:16px"></i>+1 (833) 442-7632</a>
+          <a href="#faq" style-hover="opacity:.6" style="color:var(--bg);display:flex;align-items:center;gap:9px"><i data-lucide="mail" style="width:16px;height:16px"></i>service@gh2cloud.ca</a>
+          <span style="display:flex;align-items:center;gap:9px"><i data-lucide="message-circle" style="width:16px;height:16px"></i>24/7 Live Chat</span>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Get a Fabric Patch</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Accessibility Menu</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-family:var(--display);font-weight:var(--dweight);font-size:19px;margin:0 0 16px">Shop &amp; Explore</h4>
+        <div style="display:grid;gap:10px;font-size:15px;opacity:.85">
+          <a href="#shop" style="color:var(--bg)" style-hover="opacity:.6">Shop All</a>
+          <a href="#shop" style="color:var(--bg)" style-hover="opacity:.6">Extra Pieces</a>
+          <a href="#shop" style="color:var(--bg)" style-hover="opacity:.6">Extra Covers</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Assembly Instructions</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Size Guide</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Fabric &amp; Materials</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Reviews</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-family:var(--display);font-weight:var(--dweight);font-size:19px;margin:0 0 16px">About Us</h4>
+        <div style="display:grid;gap:10px;font-size:15px;opacity:.85">
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Contact Us</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">FAQ's</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Warranty</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Blogs</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Our Story</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">View My Order</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-family:var(--display);font-weight:var(--dweight);font-size:19px;margin:0 0 16px">Policies</h4>
+        <div style="display:grid;gap:10px;font-size:15px;opacity:.85">
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Shipping Policy</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Return and Refund Policy</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Privacy Policy</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Terms of Service</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-family:var(--display);font-weight:var(--dweight);font-size:19px;margin:0 0 16px">Stay in Touch</h4>
+        <p style="font-size:15px;opacity:.85;margin:0 0 14px;line-height:1.55">Join our mailing list for exclusive updates and offers.</p>
+        <form onSubmit="{{ noSubmit }}" style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="email" placeholder="Email address" style="flex:1;min-width:140px;font-family:var(--body);font-size:14px;padding:12px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--bg)" />
+          <button type="submit" style="font-family:var(--body);font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:12px 20px;border-radius:999px;border:0;background:var(--accent);color:var(--accentInk);cursor:pointer">Join</button>
+        </form>
+        <div style="display:flex;gap:16px;margin-top:18px;font-size:14px;opacity:.85">
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Instagram</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Facebook</a>
+          <a href="#faq" style="color:var(--bg)" style-hover="opacity:.6">Pinterest</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1280px;margin:0 auto;padding:0 24px 40px;font-size:13px;opacity:.6">© 2026 GH2 Cloud</div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;editorial&quot;,&quot;modern&quot;,&quot;garden&quot;],&quot;default&quot;:&quot;modern&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look&quot;}}">
+const THEMES = {
+  editorial: {
+    bg:'#F7F2EA', surface:'#FFFDF9', ink:'#241C16', muted:'#6E6157',
+    accent:'#B4563A', accentInk:'#FFF8F4', line:'#E4DACB', soft:'#EFE7DA',
+    display:"'Playfair Display',Georgia,serif", body:"'Karla',system-ui,sans-serif",
+    radius:'18px', dtrack:'0em', dweight:'600'
+  },
+  modern: {
+    bg:'#EDEFF3', surface:'#FFFFFF', ink:'#14171D', muted:'#5B6472',
+    accent:'#4B5BD6', accentInk:'#F3F5FF', line:'#DBDFE8', soft:'#E3E7EE',
+    display:"'Syne',system-ui,sans-serif", body:"'DM Sans',system-ui,sans-serif",
+    radius:'6px', dtrack:'-0.02em', dweight:'800'
+  },
+  garden: {
+    bg:'#F2F2EB', surface:'#FBFBF6', ink:'#1E2419', muted:'#5F6A57',
+    accent:'#5C7A46', accentInk:'#F7FBF3', line:'#DCDFD1', soft:'#E8E9DE',
+    display:"'Instrument Serif',Georgia,serif", body:"'Work Sans',system-ui,sans-serif",
+    radius:'28px', dtrack:'0em', dweight:'400'
+  }
+};
+
+const money = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const num = (s) => Number(String(s).replace(/[^0-9.]/g, '')) || 0;
+
+class Component extends DCLogic {
+  state = {
+    page: 'home', items: [], qty: 1, color: 'White',
+    product: { name: '5 Piece Cloud', price: '$2,925.00', compare: '$4,125.00' }
+  };
+
+  go(page) { this.setState({ page }, () => window.scrollTo(0, 0)); }
+
+  read(e) {
+    const art = e.currentTarget.closest('article');
+    const name = art.querySelector('h3').textContent;
+    const row = art.querySelector('h3').nextElementSibling;
+    return { name, price: row.children[0].textContent, compare: row.children[1].textContent };
+  }
+
+  push(p, qty, color) {
+    this.setState(s => {
+      const key = p.name + '|' + color;
+      const items = s.items.slice();
+      const i = items.findIndex(it => it.key === key);
+      if (i > -1) items[i] = Object.assign({}, items[i], { qty: items[i].qty + qty });
+      else items.push({ key, name: p.name, color, price: num(p.price), compare: num(p.compare), qty });
+      return { items };
+    }, () => window.scrollTo(0, 0));
+  }
+
+  apply(name) {
+    const t = THEMES[name] || THEMES.editorial;
+    const r = document.documentElement.style;
+    Object.keys(t).forEach(k => r.setProperty('--' + k, t[k]));
+  }
+
+  icons() { if (window.lucide) window.lucide.createIcons(); else setTimeout(() => this.icons(), 120); }
+  componentDidMount() { this.apply(this.props.theme || 'editorial'); this.icons(); }
+  componentDidUpdate(prev) {
+    if (prev.theme !== this.props.theme) this.apply(this.props.theme || 'editorial');
+    this.icons();
+  }
+
+  renderVals() {
+    const swatch = (e) => {
+      const p = e.currentTarget.parentElement;
+      Array.from(p.children).forEach(c => { c.style.boxShadow = 'none'; });
+      e.currentTarget.style.boxShadow = '0 0 0 2px var(--surface),0 0 0 4px var(--ink)';
+    };
+    const mark = (e) => {
+      const p = e.currentTarget.parentElement;
+      Array.from(p.children).forEach(c => { c.style.borderColor = 'var(--line)'; c.style.boxShadow = 'none'; });
+      e.currentTarget.style.borderColor = 'var(--ink)';
+    };
+    const s = this.state, p = s.product;
+    const items = s.items.map((it, i) => ({
+      name: it.name, color: it.color, qty: it.qty,
+      total: money(it.price * it.qty), compareTotal: money(it.compare * it.qty),
+      inc: () => this.setState(st => { const a = st.items.slice(); a[i] = Object.assign({}, a[i], { qty: a[i].qty + 1 }); return { items: a }; }),
+      dec: () => this.setState(st => { const a = st.items.slice(); if (a[i].qty <= 1) { a.splice(i, 1); } else { a[i] = Object.assign({}, a[i], { qty: a[i].qty - 1 }); } return { items: a }; }),
+      remove: () => this.setState(st => ({ items: st.items.filter((_, j) => j !== i) }))
+    }));
+    const count = s.items.reduce((t, it) => t + it.qty, 0);
+    const subtotal = s.items.reduce((t, it) => t + it.price * it.qty, 0);
+    const savings = s.items.reduce((t, it) => t + (it.compare - it.price) * it.qty, 0);
+
+    return {
+      cart: count,
+      isHome: s.page === 'home', isProduct: s.page === 'product', isCart: s.page === 'cart',
+      goHome: (e) => { if (e) e.preventDefault(); this.go('home'); },
+      goCart: (e) => { if (e) e.preventDefault(); this.go('cart'); },
+      openProduct: (e) => { this.setState({ product: this.read(e), qty: 1 }); this.go('product'); },
+      addToCart: (e) => { this.push(this.read(e), 1, 'White'); this.go('cart'); },
+      addCurrent: () => { this.push(p, s.qty, s.color); this.go('cart'); },
+      pName: p.name, pPrice: p.price, pCompare: p.compare, pSplit: money(num(p.price) / 4),
+      color: s.color, qty: s.qty,
+      incQty: () => this.setState(st => ({ qty: st.qty + 1 })),
+      decQty: () => this.setState(st => ({ qty: Math.max(1, st.qty - 1) })),
+      pickColor: (e) => { swatch(e); this.setState({ color: e.currentTarget.dataset.name }); },
+      pickConfig: (e) => { const d = e.currentTarget.dataset; mark(e); this.setState({ product: { name: d.name, price: d.price, compare: d.compare } }); },
+      cartItems: items, cartEmpty: count === 0, cartHasItems: count > 0,
+      count, subtotal: money(subtotal), savings: money(savings),
+      pickSwatch: swatch,
+      pickA: () => this.apply('editorial'),
+      pickB: () => this.apply('modern'),
+      pickC: () => this.apply('garden'),
+      noSubmit: (e) => e.preventDefault()
+    };
+  }
+}
+
+</script>
+</body>
+</html>
