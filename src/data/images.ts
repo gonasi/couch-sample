@@ -31,7 +31,7 @@ export const IMG = {
   // details
   cushion: u("1611967164521-abae8fba4668"),
   pillowsBench: u("1579656381226-5fc0f0100c3b"),
-  fabricMacro: u("1616627561950-9f746e330187"),
+  fabricMacro: u("1573065370788-db1a2dbb098d"),
   coffeeTable: u("1633505899118-4ca6bd143043"),
   tools: u("1558618666-fcd25c85cd64"),
   // pets / lifestyle
