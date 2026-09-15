@@ -9,6 +9,7 @@ import { createPortal } from "react-dom";
 import { useUI } from "../context/UIContext";
 import { useBottomOffset } from "../hooks/useBottomOffset";
 import { useScrollLock } from "../hooks/useScrollLock";
+import { capturePointer } from "../lib/pointer";
 
 export type SheetSnap = "peek" | "half" | "full";
 
@@ -40,6 +41,8 @@ export default function BottomSheet({
   const headRef = useRef<HTMLDivElement>(null);
   const [metrics, setMetrics] = useState({ full: 0, peek: 0, vh: 0 });
   const [dragging, setDragging] = useState(false);
+  // Read in move/up handlers so a very fast tap isn't missed before re-render.
+  const draggingRef = useRef(false);
   const drag = useRef({
     startY: 0,
     startT: 0,
@@ -99,7 +102,7 @@ export default function BottomSheet({
       )
     )
       return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+    capturePointer(e.currentTarget, e.pointerId);
     const t = translateFor(snap);
     drag.current = {
       startY: e.clientY,
@@ -108,11 +111,12 @@ export default function BottomSheet({
       moved: false,
       samples: [{ y: e.clientY, time: performance.now() }],
     };
+    draggingRef.current = true;
     setDragging(true);
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
-    if (!dragging) return;
+    if (!draggingRef.current) return;
     const d = drag.current;
     const dy = e.clientY - d.startY;
     if (Math.abs(dy) > 5) d.moved = true;
@@ -129,7 +133,8 @@ export default function BottomSheet({
   };
 
   const onPointerUp = () => {
-    if (!dragging) return;
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
     const d = drag.current;
     setDragging(false);
     if (!d.moved) {
@@ -220,7 +225,16 @@ export default function BottomSheet({
             />
             {peek}
           </div>
-          <div className="sheet-body" aria-hidden={!open}>
+          <div
+            className="sheet-body"
+            aria-hidden={!open}
+            // At half height, size the scroll area to what's on screen so its end is reachable.
+            style={
+              open && metrics.full
+                ? { flex: "none", height: Math.max(0, visible(snap) - metrics.peek) }
+                : undefined
+            }
+          >
             {children}
           </div>
         </div>

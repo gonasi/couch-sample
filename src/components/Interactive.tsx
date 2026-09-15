@@ -1,4 +1,11 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Link } from "react-router-dom";
 import {
   Check,
@@ -658,6 +665,40 @@ export function Hotspots({
   };
 
   const spot = active !== null ? spots[active] : null;
+
+  // Place the popover beside the dot, or centered over it when the side doesn't fit,
+  // always kept inside the photo horizontally (phones are narrow).
+  const popRef = useRef<HTMLDivElement>(null);
+  const [popPos, setPopPos] = useState<{ left: number; top: number } | null>(
+    null,
+  );
+  useLayoutEffect(() => {
+    const wrap = wrapRef.current;
+    const pop = popRef.current;
+    if (!spot || !wrap || !pop) {
+      setPopPos(null);
+      return;
+    }
+    const W = wrap.clientWidth;
+    const H = wrap.clientHeight;
+    const pw = pop.offsetWidth;
+    const ph = pop.offsetHeight;
+    const sx = (spot.x / 100) * W;
+    const sy = (spot.y / 100) * H;
+    const gap = 22;
+    const edge = 8;
+    const side = spot.x > 55 ? sx - gap - pw : sx + gap;
+    let left: number;
+    let top: number;
+    if (side >= edge && side + pw <= W - edge) {
+      left = side;
+      top = Math.min(Math.max(sy - ph / 2, edge), Math.max(edge, H - ph - edge));
+    } else {
+      left = Math.min(Math.max(sx - pw / 2, edge), Math.max(edge, W - pw - edge));
+      top = sy > H / 2 ? sy - ph - gap : sy + gap;
+    }
+    setPopPos({ left, top });
+  }, [spot, active]);
   const shopProduct =
     spot?.productId === "couch"
       ? product
@@ -701,10 +742,11 @@ export function Hotspots({
           className="hotspot-pop"
           role="dialog"
           aria-label={spot.title}
+          ref={popRef}
           style={{
-            left: `${spot.x}%`,
-            top: `${spot.y}%`,
-            transform: `translate(${spot.x > 55 ? "calc(-100% - 22px)" : "22px"}, ${spot.y > 55 ? "calc(-100% + 16px)" : "-16px"})`,
+            left: popPos?.left ?? 0,
+            top: popPos?.top ?? 0,
+            visibility: popPos ? "visible" : "hidden",
           }}
         >
           {mode === "shop" && shopProduct ? (

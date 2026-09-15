@@ -4,7 +4,10 @@ import { COUCHES, colorHex, type Product } from "../data/products";
 import { useProductSelection } from "../hooks/useProductSelection";
 import { useScrollProgress } from "../hooks/useScrollProgress";
 import { useInView } from "../hooks/useInView";
-import { usePrefersReducedMotion } from "../hooks/useMediaQuery";
+import {
+  useMediaQuery,
+  usePrefersReducedMotion,
+} from "../hooks/useMediaQuery";
 import { useBottomOffset } from "../hooks/useBottomOffset";
 import { mixHex } from "../lib/color";
 import { money, moneyShort } from "../lib/money";
@@ -477,17 +480,40 @@ function Story({
   const t = seg - ch;
   const { scene, layoutSlug } = sceneAt(ch, t, product, hex, userColor);
   const held = COUCHES.find((c) => c.slug === layoutSlug);
+  const mobile = useMediaQuery("(max-width: 900px)");
 
-  const jump = (chapter: number, local = 0.02) => {
+  const jump = (
+    chapter: number,
+    local = 0.02,
+    behavior: ScrollBehavior = "smooth",
+  ) => {
     const el = ref.current;
     if (!el) return;
     const top = el.getBoundingClientRect().top + window.scrollY;
     const span = el.offsetHeight - window.innerHeight;
-    window.scrollTo({
-      top: top + ((chapter + local) / N) * span,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: top + ((chapter + local) / N) * span, behavior });
   };
+
+  // The size sequence starts and ends on the current couch, so after choosing a
+  // size, land at the end of the chapter where the stage shows that couch.
+  const choose = (slug: string) => {
+    onPick(slug);
+    jump(3, 0.99, "instant" as ScrollBehavior);
+  };
+
+  const dots = (
+    <nav className={mobile ? "row" : "h-dots"} style={mobile ? { gap: 10, marginBottom: 2 } : undefined} aria-label="Chapters">
+      {CHAPTERS.map((c, i) => (
+        <button
+          key={c.title}
+          className="h-dot"
+          aria-label={c.title}
+          aria-current={i === ch ? "step" : undefined}
+          onClick={() => jump(i)}
+        />
+      ))}
+    </nav>
+  );
 
   const others = COUCHES.filter((c) => c.slug !== product.slug);
   const sequence = [product, ...others];
@@ -516,14 +542,14 @@ function Story({
       >
         <div className="container h-stage-grid">
           <div
-            key={ch}
             style={{
               display: "grid",
               gap: 14,
-              animation: "fadeUp .35s ease",
               alignContent: "center",
             }}
           >
+            {mobile && dots}
+            <div key={ch} style={{ display: "grid", gap: 14, animation: "fadeUp .35s ease" }}>
             <span
               className="eyebrow"
               style={{
@@ -594,7 +620,7 @@ function Story({
                     {held.slug !== product.slug ? (
                       <button
                         className="btn btn-accent btn-sm"
-                        onClick={() => onPick(held.slug)}
+                        onClick={() => choose(held.slug)}
                       >
                         Choose this size <ArrowRight size={13} />
                       </button>
@@ -623,6 +649,7 @@ function Story({
                 Try it for 30 nights <ArrowRight size={14} />
               </button>
             )}
+            </div>
 
             <div
               style={{
@@ -649,22 +676,16 @@ function Story({
               scene={scene}
               labelColor="var(--bg)"
               title={CHAPTERS[ch].title}
-              style={{ maxHeight: "min(62svh, 560px)" }}
+              // Phones: frame the couch tighter and use bigger, shorter labels.
+              viewBox={mobile ? "-150 -112 300 196" : undefined}
+              labelSize={mobile ? 11 : 7.5}
+              shortLabels={mobile}
+              style={{ maxHeight: mobile ? "42svh" : "min(62svh, 560px)" }}
             />
           </div>
         </div>
 
-        <nav className="h-dots" aria-label="Chapters">
-          {CHAPTERS.map((c, i) => (
-            <button
-              key={c.title}
-              className="h-dot"
-              aria-label={c.title}
-              aria-current={i === ch ? "step" : undefined}
-              onClick={() => jump(i)}
-            />
-          ))}
-        </nav>
+        {!mobile && dots}
       </div>
     </section>
   );

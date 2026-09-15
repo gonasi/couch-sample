@@ -1049,9 +1049,13 @@ details summary::-webkit-details-marker {
   }
 }
 .planner-canvas {
-  touch-action: none;
+  touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
+}
+.planner-canvas [data-module],
+.planner-canvas [data-handle] {
+  touch-action: none;
 }
 .planner-canvas:focus-visible {
   outline: 2px solid var(--accent);
@@ -1245,15 +1249,7 @@ details summary::-webkit-details-marker {
   flex-direction: column;
   gap: 12px;
 }
-@media (max-width: 900px) {
-  .h-dots {
-    right: auto;
-    left: 50%;
-    top: calc(var(--header-h) + 12px);
-    transform: translateX(-50%);
-    flex-direction: row;
-  }
-}
+
 .h-dot {
   width: 10px;
   height: 10px;
@@ -1270,4 +1266,17 @@ details summary::-webkit-details-marker {
   background: currentColor;
   opacity: 1;
   transform: scale(1.25);
+}
+
+/* style quiz results: headline first on phones */
+.g-head-mobile {
+  display: none;
+}
+@media (max-width: 751px) {
+  .g-head-mobile {
+    display: block;
+  }
+  .g-head-desktop {
+    display: none;
+  }
 }

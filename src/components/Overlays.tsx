@@ -15,6 +15,7 @@ import { useUI } from "../context/UIContext";
 import { ACCESSORIES, ALL_PRODUCTS } from "../data/products";
 import { money, priceLabel } from "../lib/money";
 import { Img, Modal, QtyStepper } from "./ui";
+import { capturePointer } from "../lib/pointer";
 
 export function CartDrawer() {
   const { drawerOpen, closeDrawer } = useUI();
@@ -618,7 +619,7 @@ function ZoomStage({
 
   const onPointerDown = (e: React.PointerEvent) => {
     if ((e.target as HTMLElement).closest("button")) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+    capturePointer(e.currentTarget, e.pointerId);
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     const g = gesture.current;
     if (pointers.current.size === 1) {

@@ -15,6 +15,7 @@ import {
   usePrefersReducedMotion,
 } from "../hooks/useMediaQuery";
 import { Img, Swatches } from "./ui";
+import { capturePointer } from "../lib/pointer";
 
 /* ---------- Magnifier: a clipped, scaled copy of its children follows the pointer ---------- */
 
@@ -49,7 +50,8 @@ export function Magnifier({
     <div
       style={{
         position: "relative",
-        touchAction: touch ? "none" : undefined,
+        // Vertical swipes still scroll the page; side-to-side drags magnify.
+        touchAction: touch ? "pan-y" : undefined,
         ...style,
       }}
       onPointerMove={move}
@@ -274,7 +276,7 @@ export function FabricLens({
         scale={3}
         radius={compact ? 70 : 96}
         touch
-        hint="Hover or drag to see the weave"
+        hint="Hover or drag sideways to see the weave"
         style={{
           aspectRatio: ratio,
           borderRadius: radius,
@@ -434,7 +436,7 @@ export function WipeTest({ color = "Light Grey" }: { color?: string }) {
 
   const onDown = (e: React.PointerEvent) => {
     if (cleared) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+    capturePointer(e.currentTarget, e.pointerId);
     drawing.current = true;
     const p = toSvg(e);
     setStrokes((s) => [...s, `M${p.x.toFixed(1)} ${p.y.toFixed(1)} l0.1 0`]);
@@ -524,7 +526,8 @@ export function WipeTest({ color = "Light Grey" }: { color?: string }) {
           borderRadius: "var(--radius)",
           overflow: "hidden",
           border: "1px solid var(--line)",
-          touchAction: "none",
+          // Scrub side to side to wipe; vertical swipes keep scrolling the page.
+          touchAction: "pan-y",
           cursor: cleared ? "default" : "none",
         }}
       >
@@ -669,7 +672,7 @@ export function WipeTest({ color = "Light Grey" }: { color?: string }) {
               ? "100% clean"
               : progress > 0
                 ? `${Math.round(progress * 100)}% wiped`
-                : "Drag across the stain to wipe it"}
+                : "Scrub side to side across the stain"}
           </span>
         </div>
         <div className="row" style={{ gap: 8 }}>

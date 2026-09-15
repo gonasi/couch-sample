@@ -591,16 +591,44 @@ function Results({
   const dims = dimsFromLayout(shown.layout!);
   const photo = shown.colorImages?.[sel.color as ColorName] ?? shown.images[0];
 
+  const sectionRef = useRef<HTMLElement>(null);
   const choose = (p: Product) => {
     const target = getProduct(p.slug)!;
     sel.pickConfig(target.slug, { keepScroll: true, params: { q: code } });
+    // The switch card sits low on phones; bring the new headline back into view.
+    const top = sectionRef.current?.getBoundingClientRect().top ?? 0;
+    if (top < 0)
+      window.scrollTo({ top: top + window.scrollY - 90, behavior: "smooth" });
   };
+
+  const header = (
+    <div className="row" style={{ gap: 16 }}>
+      <MatchRing value={pct} />
+      <div>
+        <span className="eyebrow">
+          {isTop ? "Your best match" : "Also a great fit"}
+        </span>
+        <h1 className="display h1" style={{ margin: "6px 0 4px" }}>
+          {shown.name}
+        </h1>
+        <div className="row" style={{ gap: 8, fontSize: 14 }}>
+          <Stars size={14} /> 4.9{" "}
+          <span className="muted">· in {sel.color}</span>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <section
+      ref={sectionRef}
       className="container"
       style={{ paddingTop: 22, animation: "fadeUp .35s ease" }}
     >
+      {/* On phones the match headline leads, above the photo. */}
+      <div className="g-head-mobile" style={{ marginBottom: 18 }}>
+        {header}
+      </div>
       <div
         className="grid-auto"
         style={{
@@ -704,21 +732,7 @@ function Results({
         </div>
 
         <div className="stack" style={{ ["--gap" as string]: "20px" }}>
-          <div className="row" style={{ gap: 16 }}>
-            <MatchRing value={pct} />
-            <div>
-              <span className="eyebrow">
-                {isTop ? "Your best match" : "Also a great fit"}
-              </span>
-              <h1 className="display h1" style={{ margin: "6px 0 4px" }}>
-                {shown.name}
-              </h1>
-              <div className="row" style={{ gap: 8, fontSize: 14 }}>
-                <Stars size={14} /> 4.9{" "}
-                <span className="muted">· in {sel.color}</span>
-              </div>
-            </div>
-          </div>
+          <div className="g-head-desktop">{header}</div>
 
           <ul
             style={{

@@ -44,6 +44,7 @@ import {
   type FitTone,
 } from "../lib/layout";
 import { buildShareUrl, shareLink } from "../lib/share";
+import { capturePointer } from "../lib/pointer";
 import LayoutDiagram, { ModuleShape } from "../components/LayoutDiagram";
 import { RoomInputs, RoomSvg, WALL, useRoom } from "../components/RoomFit";
 import { FitPill, SaveShare } from "../components/Interactive";
@@ -284,6 +285,40 @@ export default function PdpF({ product }: { product: Product }) {
     setPreviewState(p);
   };
 
+  // Taps on empty floor deselect; swipes there scroll the page (touch-action: pan-y).
+  const bgTap = useRef<{ x: number; y: number } | null>(null);
+
+  // Handles are sized in screen pixels, so measure how many px one inch is.
+  const [pxPerIn, setPxPerIn] = useState(2);
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const measure = () => {
+      const vb = svg.viewBox.baseVal;
+      if (vb?.width) setPxPerIn(svg.getBoundingClientRect().width / vb.width);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(svg);
+    // Pieces and handles must not scroll the page when dragged, in every browser.
+    const onTouchStart = (e: TouchEvent) => {
+      if ((e.target as Element).closest?.("[data-module], [data-handle]"))
+        e.preventDefault();
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (drag.current) e.preventDefault();
+    };
+    svg.addEventListener("touchstart", onTouchStart, { passive: false });
+    svg.addEventListener("touchmove", onTouchMove, { passive: false });
+    return () => {
+      ro.disconnect();
+      svg.removeEventListener("touchstart", onTouchStart);
+      svg.removeEventListener("touchmove", onTouchMove);
+    };
+  }, [room.w, room.d]);
+  const handleR = Math.max(7, 13 / pxPerIn); // ~26px across
+  const handleHit = Math.max(handleR, 22 / pxPerIn); // ~44px touch target
+
   const toRoom = (clientX: number, clientY: number) => {
     const ctm = svgRef.current?.getScreenCTM();
     if (!ctm) return null;
@@ -297,7 +332,7 @@ export default function PdpF({ product }: { product: Product }) {
     e.preventDefault();
     const p = toRoom(e.clientX, e.clientY);
     if (!p) return;
-    svgRef.current?.setPointerCapture(e.pointerId);
+    capturePointer(svgRef.current, e.pointerId);
     drag.current = {
       id: m.id,
       grabX: p.x - m.x * CELL_W,
@@ -332,7 +367,14 @@ export default function PdpF({ product }: { product: Product }) {
     });
   };
 
-  const onSvgUp = () => {
+  const onSvgUp = (e: React.PointerEvent) => {
+    const bg = bgTap.current;
+    bgTap.current = null;
+    if (bg && !drag.current) {
+      if (Math.hypot(e.clientX - bg.x, e.clientY - bg.y) < 8)
+        dispatch({ type: "select", id: null });
+      return;
+    }
     const d = drag.current;
     const pv = previewRef.current;
     drag.current = null;
@@ -363,7 +405,7 @@ export default function PdpF({ product }: { product: Product }) {
     kind: ModuleKind,
   ) => {
     if (e.button !== 0) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+    capturePointer(e.currentTarget, e.pointerId);
     paletteDrag.current = {
       kind,
       startX: e.clientX,
@@ -694,8 +736,14 @@ export default function PdpF({ product }: { product: Product }) {
                 aria-label={`Floor plan with ${plural(present.length, "piece")}`}
                 onPointerMove={onSvgMove}
                 onPointerUp={onSvgUp}
-                onPointerCancel={onSvgUp}
-                onPointerDown={() => dispatch({ type: "select", id: null })}
+                onPointerCancel={() => {
+                  bgTap.current = null;
+                  drag.current = null;
+                  setPreview(null);
+                }}
+                onPointerDown={(e) => {
+                  bgTap.current = { x: e.clientX, y: e.clientY };
+                }}
               >
                 <defs>
                   <pattern
@@ -842,6 +890,7 @@ export default function PdpF({ product }: { product: Product }) {
                   <g>
                     {selectedModule.kind !== "ottoman" && (
                       <g
+                        data-handle
                         role="button"
                         aria-label="Rotate"
                         style={{ cursor: "pointer" }}
@@ -853,20 +902,29 @@ export default function PdpF({ product }: { product: Product }) {
                         <circle
                           cx={cellX(selectedModule.x) + CELL_W - 3}
                           cy={cellY(selectedModule.y) - 1}
-                          r={7}
+                          r={handleHit}
+                          fill="transparent"
+                        />
+                        <circle
+                          cx={cellX(selectedModule.x) + CELL_W - 3}
+                          cy={cellY(selectedModule.y) - 1}
+                          r={handleR}
                           fill="var(--ink)"
+                          stroke="var(--bg)"
+                          strokeWidth={handleR * 0.12}
                         />
                         <RotateCw
-                          x={cellX(selectedModule.x) + CELL_W - 7.5}
-                          y={cellY(selectedModule.y) - 5.5}
-                          width={9}
-                          height={9}
+                          x={cellX(selectedModule.x) + CELL_W - 3 - handleR * 0.62}
+                          y={cellY(selectedModule.y) - 1 - handleR * 0.62}
+                          width={handleR * 1.24}
+                          height={handleR * 1.24}
                           color="var(--bg)"
                           strokeWidth={2.6}
                         />
                       </g>
                     )}
                     <g
+                      data-handle
                       role="button"
                       aria-label="Delete"
                       style={{ cursor: "pointer" }}
@@ -878,14 +936,22 @@ export default function PdpF({ product }: { product: Product }) {
                       <circle
                         cx={cellX(selectedModule.x) - 1}
                         cy={cellY(selectedModule.y) - 1}
-                        r={7}
+                        r={handleHit}
+                        fill="transparent"
+                      />
+                      <circle
+                        cx={cellX(selectedModule.x) - 1}
+                        cy={cellY(selectedModule.y) - 1}
+                        r={handleR}
                         fill="#C2412D"
+                        stroke="var(--bg)"
+                        strokeWidth={handleR * 0.12}
                       />
                       <X
-                        x={cellX(selectedModule.x) - 5.5}
-                        y={cellY(selectedModule.y) - 5.5}
-                        width={9}
-                        height={9}
+                        x={cellX(selectedModule.x) - 1 - handleR * 0.58}
+                        y={cellY(selectedModule.y) - 1 - handleR * 0.58}
+                        width={handleR * 1.16}
+                        height={handleR * 1.16}
                         color="#fff"
                         strokeWidth={2.8}
                       />

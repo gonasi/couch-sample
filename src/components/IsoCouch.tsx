@@ -184,10 +184,10 @@ const shadesFor = (hex: string, dark: boolean, tone = 0): Shades =>
 
 const CARDBOARD = "#C49A66";
 const LAYERS = [
-  { name: "Kiln-dried hardwood frame", z0: 0, z1: 5, color: "#96714A" },
-  { name: "High-resilience foam core", z0: 5, z1: 13, color: "#EADBB0" },
-  { name: "Fiber comfort wrap", z0: 13, z1: 16, color: "#F7F3EA" },
-  { name: "Feather-blend topper", z0: 16, z1: 20, color: "" },
+  { name: "Kiln-dried hardwood frame", short: "Hardwood frame", z0: 0, z1: 5, color: "#96714A" },
+  { name: "High-resilience foam core", short: "Foam core", z0: 5, z1: 13, color: "#EADBB0" },
+  { name: "Fiber comfort wrap", short: "Fiber wrap", z0: 13, z1: 16, color: "#F7F3EA" },
+  { name: "Feather-blend topper", short: "Feather topper", z0: 16, z1: 20, color: "" },
 ];
 
 /* ---------- renderer ---------- */
@@ -195,12 +195,17 @@ const LAYERS = [
 export default function IsoCouch({
   scene,
   labelColor = "currentColor",
+  labelSize = 7.5,
+  shortLabels = false,
   viewBox = "-185 -135 370 240",
   style,
   title = "Couch illustration",
 }: {
   scene: IsoScene;
   labelColor?: string;
+  /** label font size in viewBox units */
+  labelSize?: number;
+  shortLabels?: boolean;
   viewBox?: string;
   style?: React.CSSProperties;
   title?: string;
@@ -400,7 +405,7 @@ export default function IsoCouch({
       {exploded && scene.explode!.amount > 0.05 && (
         <g
           fontFamily="var(--body)"
-          fontSize={7.5}
+          fontSize={labelSize}
           fill={labelColor}
           opacity={clamp01((scene.explode!.amount - 0.4) / 0.4)}
         >
@@ -411,7 +416,7 @@ export default function IsoCouch({
               exploded.oy + CELL_D / 2,
               (l.z0 + l.z1) / 2 + lift,
             );
-            const tx = ax + 26;
+            const tx = ax + labelSize * 2.8;
             return (
               <g key={l.name}>
                 <line
@@ -428,7 +433,7 @@ export default function IsoCouch({
                   <tspan fontFamily="var(--mono)" opacity={0.6}>
                     0{LAYERS.length - i}{" "}
                   </tspan>
-                  {l.name}
+                  {shortLabels ? l.short : l.name}
                 </text>
               </g>
             );
