@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Check,
   ChevronLeft,
@@ -8,6 +8,7 @@ import {
   Flame,
   Lock,
   RotateCcw,
+  Ruler,
   ShieldCheck,
   Timer,
   Truck,
@@ -35,6 +36,11 @@ import {
   UgcStrip,
 } from "../components/Sections";
 import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
+import {
+  ConfigCompareModal,
+  DeliveryEstimator,
+  FinancingModal,
+} from "../components/Interactive";
 import {
   deliveryDate,
   detailItems,
@@ -80,6 +86,8 @@ export default function PdpD({ product }: { product: Product }) {
   const [idx, setIdx] = useState(0);
   const [bundleId, setBundleId] = useState("complete");
   const [showBar, setShowBar] = useState(false);
+  const [financing, setFinancing] = useState(false);
+  const [compare, setCompare] = useState(false);
   const buyRef = useRef<HTMLButtonElement>(null);
   const touchX = useRef<number | null>(null);
 
@@ -371,13 +379,13 @@ export default function PdpD({ product }: { product: Product }) {
                 {money(sel.split)}
               </strong>{" "}
               interest-free ·{" "}
-              <Link
-                to="/support/financing"
-                style={{ textDecoration: "underline" }}
-                className="muted"
+              <button
+                className="text-btn muted"
+                style={{ fontSize: 14 }}
+                onClick={() => setFinancing(true)}
               >
-                Learn more
-              </Link>
+                See monthly plans
+              </button>
             </div>
           </div>
 
@@ -443,8 +451,20 @@ export default function PdpD({ product }: { product: Product }) {
           </div>
 
           <div>
-            <div className="label" style={{ marginBottom: 10 }}>
-              Size
+            <div className="row between label" style={{ marginBottom: 10 }}>
+              <span>Size</span>
+              <button
+                className="text-btn row"
+                style={{
+                  gap: 5,
+                  letterSpacing: 0,
+                  textTransform: "none",
+                  fontSize: 14,
+                }}
+                onClick={() => setCompare(true)}
+              >
+                <Ruler size={14} /> Compare sizes
+              </button>
             </div>
             <div className="row wrap" style={{ gap: 8 }}>
               {COUCHES.map((c) => (
@@ -632,6 +652,7 @@ export default function PdpD({ product }: { product: Product }) {
               <strong style={{ fontWeight: 600 }}>{deliveryDate()}</strong>
             </span>
           </div>
+          <DeliveryEstimator compact />
 
           <div
             style={{
@@ -879,6 +900,18 @@ export default function PdpD({ product }: { product: Product }) {
           </div>
         </div>
       )}
+      <FinancingModal
+        open={financing}
+        onClose={() => setFinancing(false)}
+        amount={total}
+      />
+      <ConfigCompareModal
+        open={compare}
+        onClose={() => setCompare(false)}
+        current={product.slug}
+        color={sel.color}
+        onChoose={(slug) => sel.pickConfig(slug, { keepScroll: true })}
+      />
     </div>
   );
 }

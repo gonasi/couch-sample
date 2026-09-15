@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import DemoSwitcher from "./components/DemoSwitcher";
 import { CartDrawer, SearchOverlay, Toasts } from "./components/Overlays";
 import { isVariant, useUI } from "./context/UIContext";
+import { DEFAULT_CHROME, VARIANT_META } from "./data/variants";
 import { getProduct } from "./data/products";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
@@ -16,11 +17,14 @@ import { About, Policy, ReviewsPage, Support } from "./pages/InfoPages";
 import NotFound from "./pages/NotFound";
 
 function ScrollToTop() {
-  const { pathname, search } = useLocation();
+  const { pathname, search, state } = useLocation();
   const v = new URLSearchParams(search).get("v");
+  const keepScroll = !!(state as { keepScroll?: boolean } | null)?.keepScroll;
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname, v]);
+    // Size switches inside interactive PDPs keep the reader's place.
+    if (keepScroll) return;
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, [pathname, v]); // eslint-disable-line react-hooks/exhaustive-deps
   return null;
 }
 
@@ -28,20 +32,22 @@ export default function App() {
   const location = useLocation();
   const { variant } = useUI();
 
-  // PDP B (Editorial Scroll) uses a transparent header over a full-bleed hero and no ticker.
+  // Some PDP variants change the page chrome (transparent header, no ticker, no footer).
   const slug = location.pathname.startsWith("/product/")
     ? location.pathname.split("/")[2]
     : null;
   const product = slug ? getProduct(slug) : undefined;
   const v = new URLSearchParams(location.search).get("v");
-  const editorial =
-    product?.kind === "couch" && (isVariant(v) ? v : variant) === "b";
+  const chrome =
+    product?.kind === "couch"
+      ? VARIANT_META[isVariant(v) ? v : variant].chrome
+      : DEFAULT_CHROME;
 
   return (
     <>
       <ScrollToTop />
-      {!editorial && <AnnouncementTicker />}
-      <Header transparent={editorial} />
+      {chrome.ticker && <AnnouncementTicker />}
+      <Header transparent={chrome.header === "transparent"} />
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -61,7 +67,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <Footer />
+      {chrome.footer && <Footer />}
       <CartDrawer />
       <SearchOverlay />
       <Toasts />

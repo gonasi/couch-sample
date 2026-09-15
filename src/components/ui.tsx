@@ -1,4 +1,11 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
 import {
   Blocks,
   Leaf,
@@ -17,6 +24,7 @@ import {
 import { sized } from "../data/images";
 import { COLORS, COUCHES } from "../data/products";
 import { moneyShort } from "../lib/money";
+import { useScrollLock } from "../hooks/useScrollLock";
 
 /* ---------- Img: Unsplash photo with the design's striped placeholder as fallback ---------- */
 export function Img({
@@ -29,6 +37,7 @@ export function Img({
   style,
   eager,
   radius,
+  fit,
 }: {
   src: string;
   alt: string;
@@ -39,6 +48,7 @@ export function Img({
   style?: CSSProperties;
   eager?: boolean;
   radius?: string;
+  fit?: "cover" | "contain";
 }) {
   const [state, setState] = useState<"loading" | "ok" | "error">("loading");
   useEffect(() => setState("loading"), [src]);
@@ -54,7 +64,8 @@ export function Img({
           loading={eager ? "eager" : "lazy"}
           onLoad={() => setState("ok")}
           onError={() => setState("error")}
-          style={{ opacity: state === "ok" ? 1 : 0 }}
+          style={{ opacity: state === "ok" ? 1 : 0, objectFit: fit }}
+          draggable={false}
         />
       )}
       {state === "error" && (
@@ -255,40 +266,55 @@ export function Modal({
   children,
   width = 640,
   label,
+  fullscreen,
 }: {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
   width?: number;
   label?: string;
+  fullscreen?: boolean;
 }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useScrollLock(open);
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.activeElement as HTMLElement | null;
+    dialogRef.current?.focus({ preventScroll: true });
+    return () => previous?.focus?.({ preventScroll: true });
+  }, [open]);
   if (!open) return null;
-  return (
+  // Portaled so a transformed/animated ancestor can't offset the fixed dialog.
+  return createPortal(
     <>
       <div className="overlay" onClick={onClose} />
       <div
-        className="modal"
+        ref={dialogRef}
+        className={`modal ${fullscreen ? "full" : ""}`}
         role="dialog"
+        aria-modal="true"
         aria-label={label}
-        style={{ ["--w" as string]: `${width}px` }}
+        tabIndex={-1}
+        style={{ ["--w" as string]: `${width}px`, outline: "none" }}
       >
         <button
           className="icon-btn"
           aria-label="Close"
           onClick={onClose}
-          style={{ position: "absolute", top: 12, right: 12, zIndex: 2 }}
+          style={{ position: "absolute", top: 12, right: 12, zIndex: 3 }}
         >
           <X size={17} />
         </button>
         {children}
       </div>
-    </>
+    </>,
+    document.body,
   );
 }
 

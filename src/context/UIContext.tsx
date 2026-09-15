@@ -9,11 +9,10 @@ import {
 } from "react";
 import { applyTheme, type ThemeName } from "../theme/themes";
 import { readStore, writeStore } from "../lib/money";
+import { isVariant, type Variant } from "../data/variants";
+import { useScrollLock } from "../hooks/useScrollLock";
 
-export type Variant = "a" | "b" | "c" | "d" | "e";
-export const VARIANTS: Variant[] = ["a", "b", "c", "d", "e"];
-export const isVariant = (s: string | null | undefined): s is Variant =>
-  VARIANTS.includes(s as Variant);
+export { VARIANTS, isVariant, type Variant } from "../data/variants";
 
 interface Toast {
   id: number;
@@ -33,9 +32,12 @@ interface UIState {
   setVariant: (v: Variant) => void;
   toasts: Toast[];
   toast: (message: string, tone?: Toast["tone"]) => void;
-  /** height of any fixed bottom bar, so floating UI can sit above it */
+  /** height of the tallest fixed bottom bar, so floating UI can sit above it */
   bottomOffset: number;
+  /** legacy single-owner setter (variants B, D, E) */
   setBottomOffset: (n: number) => void;
+  /** keyed setter so several bars/sheets can coexist; 0 removes the entry */
+  setBottomOffsetFor: (key: string, n: number) => void;
 }
 
 const UIContext = createContext<UIState | null>(null);
@@ -51,7 +53,7 @@ export function UIProvider({ children }: { children: ReactNode }) {
     return isVariant(v) ? v : "a";
   });
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [bottomOffset, setBottomOffset] = useState(0);
+  const [offsets, setOffsets] = useState<Record<string, number>>({});
   const nextId = useRef(1);
 
   useEffect(() => {
@@ -79,9 +81,22 @@ export function UIProvider({ children }: { children: ReactNode }) {
   const openDrawer = useCallback(() => setDrawerOpen(true), []);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
-  useEffect(() => {
-    document.body.style.overflow = drawerOpen || searchOpen ? "hidden" : "";
-  }, [drawerOpen, searchOpen]);
+  useScrollLock(drawerOpen || searchOpen);
+
+  const setBottomOffsetFor = useCallback((key: string, n: number) => {
+    setOffsets((o) => {
+      if ((o[key] ?? 0) === n) return o;
+      const next = { ...o };
+      if (n > 0) next[key] = n;
+      else delete next[key];
+      return next;
+    });
+  }, []);
+  const setBottomOffset = useCallback(
+    (n: number) => setBottomOffsetFor("legacy", n),
+    [setBottomOffsetFor],
+  );
+  const bottomOffset = Math.max(0, ...Object.values(offsets));
 
   return (
     <UIContext.Provider
@@ -99,6 +114,7 @@ export function UIProvider({ children }: { children: ReactNode }) {
         toast,
         bottomOffset,
         setBottomOffset,
+        setBottomOffsetFor,
       }}
     >
       {children}

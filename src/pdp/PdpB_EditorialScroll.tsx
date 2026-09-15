@@ -7,6 +7,9 @@ import { useUI } from "../context/UIContext";
 import { money, moneyShort } from "../lib/money";
 import { Img, Swatches } from "../components/ui";
 import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
+import { Hotspots } from "../components/Interactive";
+import { FabricTexture, Magnifier } from "../components/Magnify";
+import { RoomFitChecker } from "../components/RoomFit";
 import { scrollToId } from "./shared";
 
 /** PDP Option B — Editorial Scroll (faithful port of the design canvas). */
@@ -177,6 +180,32 @@ export default function PdpB({ product }: { product: Product }) {
       </section>
 
       <section
+        style={{ maxWidth: 1400, margin: "84px auto 0", padding: "0 28px" }}
+        aria-label="Shop the room"
+      >
+        <div
+          className="row between wrap"
+          style={{ gap: 12, marginBottom: 18, alignItems: "baseline" }}
+        >
+          <h2
+            className="display"
+            style={{ fontSize: "clamp(30px,4vw,48px)", margin: 0 }}
+          >
+            Shop the room
+          </h2>
+          <span className="muted" style={{ fontSize: 15 }}>
+            Tap a dot to see what’s in the picture.
+          </span>
+        </div>
+        <Hotspots
+          sceneId="bRoom"
+          product={product}
+          color={sel.color}
+          radius="4px"
+        />
+      </section>
+
+      <section
         className="grid-auto"
         style={{
           maxWidth: 1400,
@@ -187,22 +216,37 @@ export default function PdpB({ product }: { product: Product }) {
         }}
       >
         {[
-          [IMG.fabricMacro, "Fabric macro"],
+          [IMG.fabricMacro, `Performance weave · ${sel.color} · hover to magnify`],
           [IMG.cushion, "Cushion cutaway"],
           [IMG.tools, "Connector detail"],
         ].map(([src, label], i) => (
           <figure
-            key={label}
+            key={i}
             style={{ margin: 0, marginTop: i === 1 ? 48 : 0 }}
           >
-            <Img
-              src={src}
-              alt={label}
-              w={900}
-              ratio="3/4"
-              radius="4px"
-              className="zoom-hover"
-            />
+            {i === 0 ? (
+              <Magnifier
+                scale={3}
+                radius={90}
+                touch
+                style={{
+                  aspectRatio: "3/4",
+                  borderRadius: 4,
+                  overflow: "hidden",
+                }}
+              >
+                <FabricTexture color={sel.color} />
+              </Magnifier>
+            ) : (
+              <Img
+                src={src}
+                alt={label}
+                w={900}
+                ratio="3/4"
+                radius="4px"
+                className="zoom-hover"
+              />
+            )}
             <figcaption
               style={{
                 fontFamily: "var(--mono)",
@@ -300,6 +344,23 @@ export default function PdpB({ product }: { product: Product }) {
               {v}
             </div>
           ))}
+        </div>
+        <div style={{ marginTop: 64 }}>
+          <h3
+            className="display"
+            style={{ fontSize: "clamp(26px,3.4vw,40px)", margin: "0 0 8px" }}
+          >
+            Will it fit?
+          </h3>
+          <p className="muted" style={{ margin: "0 0 24px", fontSize: 16 }}>
+            Enter your room and we’ll draw the {product.shortName} to scale.
+          </p>
+          <RoomFitChecker
+            modules={product.layout!}
+            color={sel.color}
+            currentSlug={product.slug}
+            onSuggest={(slug) => sel.pickConfig(slug, { keepScroll: true })}
+          />
         </div>
       </section>
 

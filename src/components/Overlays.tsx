@@ -424,12 +424,18 @@ export function Lightbox({
   index,
   onClose,
   onIndex,
+  fullscreen,
 }: {
   images: string[];
   index: number | null;
   onClose: () => void;
   onIndex: (i: number) => void;
+  fullscreen?: boolean;
 }) {
+  const prev = () =>
+    index !== null && onIndex((index - 1 + images.length) % images.length);
+  const next = () => index !== null && onIndex((index + 1) % images.length);
+
   useEffect(() => {
     if (index === null) return;
     const onKey = (e: KeyboardEvent) => {
@@ -447,15 +453,23 @@ export function Lightbox({
       onClose={onClose}
       width={1100}
       label="Image viewer"
+      fullscreen={fullscreen}
     >
       {index !== null && (
-        <div style={{ position: "relative", background: "#111" }}>
-          <Img
+        <div
+          style={{
+            position: "relative",
+            background: "#111",
+            height: fullscreen ? "100%" : undefined,
+          }}
+        >
+          <ZoomStage
+            key={images[index]}
             src={images[index]}
             alt={`Photo ${index + 1}`}
-            w={2000}
-            ratio="3/2"
-            style={{ background: "#111" }}
+            fullscreen={fullscreen}
+            onPrev={prev}
+            onNext={next}
           />
           <button
             className="icon-btn"
@@ -464,8 +478,9 @@ export function Lightbox({
               left: 14,
               top: "50%",
               transform: "translateY(-50%)",
+              zIndex: 2,
             }}
-            onClick={() => onIndex((index - 1 + images.length) % images.length)}
+            onClick={prev}
             aria-label="Previous"
           >
             <ChevronLeft size={18} />
@@ -477,8 +492,9 @@ export function Lightbox({
               right: 14,
               top: "50%",
               transform: "translateY(-50%)",
+              zIndex: 2,
             }}
-            onClick={() => onIndex((index + 1) % images.length)}
+            onClick={next}
             aria-label="Next"
           >
             <ChevronRight size={18} />
@@ -493,6 +509,8 @@ export function Lightbox({
               color: "#fff",
               fontSize: 13,
               letterSpacing: ".1em",
+              pointerEvents: "none",
+              zIndex: 2,
             }}
           >
             {index + 1} / {images.length}
@@ -500,5 +518,228 @@ export function Lightbox({
         </div>
       )}
     </Modal>
+  );
+}
+
+const MAX_ZOOM = 4;
+const TAP_ZOOM = 2.5;
+
+/**
+ * Pan/zoom surface: double-click or double-tap to zoom at a point, wheel or pinch
+ * to zoom, drag to pan, swipe to change photo when not zoomed, +/−/0 keys.
+ */
+function ZoomStage({
+  src,
+  alt,
+  fullscreen,
+  onPrev,
+  onNext,
+}: {
+  src: string;
+  alt: string;
+  fullscreen?: boolean;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const layerRef = useRef<HTMLDivElement>(null);
+  const view = useRef({ s: 1, x: 0, y: 0 });
+  const pointers = useRef(new Map<number, { x: number; y: number }>());
+  const gesture = useRef({
+    downX: 0,
+    downY: 0,
+    downT: 0,
+    lastX: 0,
+    lastY: 0,
+    startDist: 0,
+    startScale: 1,
+    pinched: false,
+  });
+  const lastTap = useRef({ t: 0, x: 0, y: 0 });
+  const [zoomed, setZoomed] = useState(false);
+
+  const apply = (animate = false) => {
+    const el = layerRef.current;
+    const wrap = wrapRef.current;
+    if (!el || !wrap) return;
+    const v = view.current;
+    const maxX = ((v.s - 1) * wrap.clientWidth) / 2;
+    const maxY = ((v.s - 1) * wrap.clientHeight) / 2;
+    v.x = Math.max(-maxX, Math.min(maxX, v.x));
+    v.y = Math.max(-maxY, Math.min(maxY, v.y));
+    el.style.transition = animate ? "transform .25s ease" : "none";
+    el.style.transform = `translate(${v.x}px, ${v.y}px) scale(${v.s})`;
+    setZoomed(v.s > 1.01);
+  };
+
+  const zoomAt = (clientX: number, clientY: number, scale: number, animate = false) => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const r = wrap.getBoundingClientRect();
+    const v = view.current;
+    const next = Math.max(1, Math.min(MAX_ZOOM, scale));
+    const px = clientX - (r.left + r.width / 2);
+    const py = clientY - (r.top + r.height / 2);
+    v.x = px - ((px - v.x) * next) / v.s;
+    v.y = py - ((py - v.y) * next) / v.s;
+    v.s = next;
+    if (next === 1) {
+      v.x = 0;
+      v.y = 0;
+    }
+    apply(animate);
+  };
+
+  const zoomCenter = (scale: number) => {
+    const r = wrapRef.current?.getBoundingClientRect();
+    if (r) zoomAt(r.left + r.width / 2, r.top + r.height / 2, scale, true);
+  };
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    // React's onWheel is passive; we need preventDefault to stop the page scrolling.
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      zoomAt(e.clientX, e.clientY, view.current.s * Math.exp(-e.deltaY * 0.0018));
+    };
+    wrap.addEventListener("wheel", onWheel, { passive: false });
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "+" || e.key === "=") zoomCenter(view.current.s * 1.5);
+      if (e.key === "-" || e.key === "_") zoomCenter(view.current.s / 1.5);
+      if (e.key === "0") zoomCenter(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      wrap.removeEventListener("wheel", onWheel);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if ((e.target as HTMLElement).closest("button")) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const g = gesture.current;
+    if (pointers.current.size === 1) {
+      Object.assign(g, {
+        downX: e.clientX,
+        downY: e.clientY,
+        downT: performance.now(),
+        lastX: e.clientX,
+        lastY: e.clientY,
+        pinched: false,
+      });
+    } else if (pointers.current.size === 2) {
+      const [a, b] = [...pointers.current.values()];
+      g.startDist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+      g.startScale = view.current.s;
+      g.pinched = true;
+    }
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!pointers.current.has(e.pointerId)) return;
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const g = gesture.current;
+    if (pointers.current.size >= 2) {
+      const [a, b] = [...pointers.current.values()];
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, (g.startScale * dist) / g.startDist);
+      return;
+    }
+    if (view.current.s > 1) {
+      view.current.x += e.clientX - g.lastX;
+      view.current.y += e.clientY - g.lastY;
+      apply();
+    }
+    g.lastX = e.clientX;
+    g.lastY = e.clientY;
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!pointers.current.has(e.pointerId)) return;
+    pointers.current.delete(e.pointerId);
+    const g = gesture.current;
+    if (pointers.current.size > 0 || g.pinched) {
+      if (pointers.current.size === 0) g.pinched = false;
+      return;
+    }
+    const dx = e.clientX - g.downX;
+    const dy = e.clientY - g.downY;
+    const quick = performance.now() - g.downT < 300;
+    if (Math.hypot(dx, dy) < 10 && quick) {
+      const now = performance.now();
+      const lt = lastTap.current;
+      if (now - lt.t < 320 && Math.hypot(e.clientX - lt.x, e.clientY - lt.y) < 30) {
+        zoomAt(e.clientX, e.clientY, view.current.s > 1.01 ? 1 : TAP_ZOOM, true);
+        lastTap.current = { t: 0, x: 0, y: 0 };
+      } else lastTap.current = { t: now, x: e.clientX, y: e.clientY };
+      return;
+    }
+    if (view.current.s <= 1.01 && Math.abs(dx) > 50 && Math.abs(dy) < 80) {
+      if (dx < 0) onNext();
+      else onPrev();
+    }
+  };
+
+  return (
+    <div
+      ref={wrapRef}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        touchAction: "none",
+        cursor: zoomed ? "grab" : "zoom-in",
+        height: fullscreen ? "100dvh" : undefined,
+        aspectRatio: fullscreen ? undefined : "3/2",
+        userSelect: "none",
+      }}
+    >
+      <div
+        ref={layerRef}
+        style={{ width: "100%", height: "100%", transformOrigin: "50% 50%" }}
+      >
+        <Img
+          src={src}
+          alt={alt}
+          w={2000}
+          fit={fullscreen ? "contain" : "cover"}
+          style={{ background: "#111", width: "100%", height: "100%" }}
+          eager
+        />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: 16,
+          left: 16,
+          color: "#fff",
+          fontSize: 12,
+          letterSpacing: ".06em",
+          background: "rgba(0,0,0,.45)",
+          padding: "5px 10px",
+          borderRadius: 99,
+          pointerEvents: "none",
+          opacity: zoomed ? 0 : 0.9,
+          transition: "opacity .3s",
+        }}
+      >
+        Double-tap or scroll to zoom
+      </div>
+      {zoomed && (
+        <button
+          className="btn btn-sm"
+          onClick={() => zoomCenter(1)}
+          style={{ position: "absolute", top: 12, right: 64, zIndex: 2 }}
+        >
+          Reset zoom
+        </button>
+      )}
+    </div>
   );
 }

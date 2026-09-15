@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Expand, Play } from "lucide-react";
+import { Expand, Play, Ruler } from "lucide-react";
 import type { Product } from "../data/products";
 import { useProductSelection } from "../hooks/useProductSelection";
 import { money } from "../lib/money";
@@ -17,6 +17,9 @@ import { FeatureCards, PairsWellWith } from "../components/Sections";
 import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
 import { Lightbox } from "../components/Overlays";
 import VideoModal from "../components/VideoModal";
+import { ZoomLens } from "../components/Magnify";
+import { ConfigCompareModal, SaveShare } from "../components/Interactive";
+import { RoomFitChecker } from "../components/RoomFit";
 import { detailItems, scrollToId } from "./shared";
 
 /** PDP Option A — Classic Gallery (faithful port of the design canvas). */
@@ -25,6 +28,8 @@ export default function PdpA({ product }: { product: Product }) {
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [video, setVideo] = useState(false);
+  const [compare, setCompare] = useState(false);
+  const keepPick = (slug: string) => sel.pickConfig(slug, { keepScroll: true });
 
   useEffect(() => setActive(0), [sel.color, product.slug]);
 
@@ -64,16 +69,29 @@ export default function PdpA({ product }: { product: Product }) {
               }}
               aria-label="Open image viewer"
             >
-              <Img
-                src={sel.images[active]}
-                alt={`${product.name} in ${sel.color}`}
-                w={1400}
-                ratio="4/3"
-                radius="var(--radius)"
-                style={{ border: "1px solid var(--line)" }}
-                eager
-              />
+              <div
+                style={{
+                  border: "1px solid var(--line)",
+                  borderRadius: "var(--radius)",
+                  overflow: "hidden",
+                }}
+              >
+                <ZoomLens
+                  src={sel.images[active]}
+                  alt={`${product.name} in ${sel.color}`}
+                  w={1400}
+                  ratio="4/3"
+                  eager
+                />
+              </div>
             </button>
+            <div style={{ position: "absolute", right: 16, top: 16 }}>
+              <SaveShare
+                slug={product.slug}
+                color={sel.color}
+                title={product.name}
+              />
+            </div>
             <span
               className="pill pill-soft"
               style={{
@@ -219,10 +237,22 @@ export default function PdpA({ product }: { product: Product }) {
           </div>
 
           <div>
-            <div className="label" style={{ marginBottom: 12 }}>
-              Configuration
+            <div className="row between label" style={{ marginBottom: 12 }}>
+              <span>Configuration</span>
+              <button
+                className="text-btn row"
+                style={{
+                  gap: 5,
+                  letterSpacing: 0,
+                  textTransform: "none",
+                  fontSize: 14,
+                }}
+                onClick={() => setCompare(true)}
+              >
+                <Ruler size={14} /> Compare sizes
+              </button>
             </div>
-            <ConfigPicker current={product.slug} onPick={sel.pickConfig} />
+            <ConfigPicker current={product.slug} onPick={keepPick} />
           </div>
 
           <div className="row wrap" style={{ gap: 12 }}>
@@ -238,7 +268,22 @@ export default function PdpA({ product }: { product: Product }) {
 
           <TrustRow />
           <Accordion
-            items={detailItems(product)}
+            items={(() => {
+              const items = detailItems(product);
+              items.splice(1, 0, {
+                title: "Will it fit your room?",
+                content: (
+                  <RoomFitChecker
+                    compact
+                    modules={product.layout!}
+                    color={sel.color}
+                    currentSlug={product.slug}
+                    onSuggest={keepPick}
+                  />
+                ),
+              });
+              return items;
+            })()}
             defaultOpen={0}
             icon="chevron"
           />
@@ -256,6 +301,13 @@ export default function PdpA({ product }: { product: Product }) {
         index={lightbox}
         onClose={() => setLightbox(null)}
         onIndex={setLightbox}
+      />
+      <ConfigCompareModal
+        open={compare}
+        onClose={() => setCompare(false)}
+        current={product.slug}
+        color={sel.color}
+        onChoose={keepPick}
       />
       <VideoModal
         open={video}

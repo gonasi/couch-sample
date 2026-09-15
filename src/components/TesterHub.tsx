@@ -1,18 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, FlaskConical, X } from "lucide-react";
-import { VARIANTS, useUI, type Variant } from "../context/UIContext";
+import { useUI } from "../context/UIContext";
 import { DEFAULT_PRODUCT } from "../data/products";
+import { VARIANTS, VARIANT_META } from "../data/variants";
 import { readStore, writeStore } from "../lib/money";
-import { VARIANT_NAMES } from "./DemoSwitcher";
 
-export const VARIANT_BLURBS: Record<Variant, string> = {
-  a: "Design Option A: sticky gallery, configuration cards, accordions.",
-  b: "Design Option B: full-bleed hero, story-led scroll, fixed buy bar.",
-  c: "Step-by-step builder with a live top-down layout diagram and add-ons.",
-  d: "Sale countdown, low-stock cues, bundle tiers, express pay, sticky add-to-cart.",
-  e: "Long-form sales page: deep reviews with filters and photos, Q&A, FAQ tabs, press, guarantee.",
-};
+const GROUPS = [
+  { group: "core", title: "Core page layouts", range: "A–E" },
+  { group: "interactive", title: "Interactive concepts", range: "F–I", isNew: true },
+] as const;
 
 /** Links for product testers to open each PDP variant. Shown at the top of the home page. */
 export default function TesterHub() {
@@ -76,55 +73,76 @@ export default function TesterHub() {
             <X size={13} /> Hide
           </button>
         </div>
-        <div
-          className="grid-auto"
-          style={{ ["--min" as string]: "200px", ["--gap" as string]: "10px" }}
-        >
-          {VARIANTS.map((v) => (
-            <Link
-              key={v}
-              to={`/product/${DEFAULT_PRODUCT}?v=${v}`}
-              onClick={() => setVariant(v)}
-              className="card"
-              style={{
-                padding: "14px 16px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 6,
-                background: "var(--bg)",
-                borderColor: variant === v ? "var(--ink)" : "var(--line)",
-              }}
-            >
-              <div className="row between">
-                <span className="row" style={{ gap: 8 }}>
-                  <span
-                    style={{
-                      width: 26,
-                      height: 26,
-                      borderRadius: 99,
-                      background: "var(--ink)",
-                      color: "var(--bg)",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 13,
-                    }}
-                  >
-                    {v.toUpperCase()}
-                  </span>
-                  <strong style={{ fontWeight: 600, fontSize: 15 }}>
-                    {VARIANT_NAMES[v]}
-                  </strong>
+        <div style={{ display: "grid", gap: 18 }}>
+          {GROUPS.map((g) => (
+            <div key={g.group}>
+              <div className="row" style={{ gap: 8, marginBottom: 8 }}>
+                <span className="label" style={{ fontSize: 12 }}>
+                  {g.title} ({g.range})
                 </span>
-                <ArrowRight size={15} />
+                {"isNew" in g && <span className="pill pill-accent">New</span>}
               </div>
-              <span
-                className="muted"
-                style={{ fontSize: 13, lineHeight: 1.45 }}
+              <div
+                className="grid-auto"
+                style={{
+                  ["--min" as string]: "200px",
+                  ["--gap" as string]: "10px",
+                }}
               >
-                {VARIANT_BLURBS[v]}
-              </span>
-            </Link>
+                {VARIANTS.filter((v) => VARIANT_META[v].group === g.group).map(
+                  (v) => (
+                    <Link
+                      key={v}
+                      to={`/product/${DEFAULT_PRODUCT}?v=${v}`}
+                      onClick={() => setVariant(v)}
+                      className="card"
+                      style={{
+                        padding: "14px 16px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 6,
+                        background: "var(--bg)",
+                        borderColor:
+                          variant === v ? "var(--ink)" : "var(--line)",
+                      }}
+                    >
+                      <div className="row between">
+                        <span className="row" style={{ gap: 8 }}>
+                          <span
+                            style={{
+                              width: 26,
+                              height: 26,
+                              borderRadius: 99,
+                              background:
+                                g.group === "interactive"
+                                  ? "var(--accent)"
+                                  : "var(--ink)",
+                              color: "var(--bg)",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 13,
+                            }}
+                          >
+                            {v.toUpperCase()}
+                          </span>
+                          <strong style={{ fontWeight: 600, fontSize: 15 }}>
+                            {VARIANT_META[v].name}
+                          </strong>
+                        </span>
+                        <ArrowRight size={15} />
+                      </div>
+                      <span
+                        className="muted"
+                        style={{ fontSize: 13, lineHeight: 1.45 }}
+                      >
+                        {VARIANT_META[v].blurb}
+                      </span>
+                    </Link>
+                  ),
+                )}
+              </div>
+            </div>
           ))}
         </div>
       </div>

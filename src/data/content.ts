@@ -1,3 +1,5 @@
+import { IMG } from "./images";
+
 export const TICKER = [
   "Up to $2,000 Off (30%) — Ends Soon",
   "Khaki and Black are Back with Limited Stock!",
@@ -297,4 +299,160 @@ export const SUPPORT_LINKS = [
   { to: "/support/size-guide", label: "Size Guide" },
   { to: "/support/financing", label: "Financing" },
   { to: "/support/contact", label: "Contact Us" },
+];
+
+/* ---------- interactive widgets ---------- */
+
+export interface HotspotSpot {
+  x: number; // % from left
+  y: number; // % from top
+  title: string;
+  body: string;
+  /** product id to shop; "couch" means the couch on the current page */
+  productId?: string;
+}
+
+export interface HotspotScene {
+  image: string;
+  /** keep the photo's native ratio so the % positions stay put at every width */
+  ratio: string;
+  alt: string;
+  spots: HotspotSpot[];
+}
+
+export type HotspotSceneId = "bRoom" | "livingRoom" | "anatomy";
+
+export const HOTSPOT_SCENES: Record<HotspotSceneId, HotspotScene> = {
+  bRoom: {
+    image: IMG.wideLiving,
+    ratio: "19/10",
+    alt: "Sunlit open-plan living room with a grey modular sofa",
+    spots: [
+      {
+        x: 51,
+        y: 66,
+        title: "The Cloud",
+        body: "Feather-blend over foam, in any of four washable colors.",
+        productId: "couch",
+      },
+      {
+        x: 46,
+        y: 85,
+        title: "Extra Ottoman",
+        body: "Pull up a footrest or push it in for a pit. Hidden storage inside.",
+        productId: "ottoman",
+      },
+      {
+        x: 60,
+        y: 59,
+        title: "Replacement Cover Set",
+        body: "Swap colors with the seasons. Every cover unzips and machine washes.",
+        productId: "covers",
+      },
+      {
+        x: 38,
+        y: 64,
+        title: "Feel it first",
+        body: "Free booklet of 4\" swatches in every color.",
+        productId: "swatches",
+      },
+    ],
+  },
+  livingRoom: {
+    image: IMG.greyLiving,
+    ratio: "3/2",
+    alt: "Grey living room with a sofa, loveseat and round coffee table",
+    spots: [
+      {
+        x: 13,
+        y: 70,
+        title: "The Cloud",
+        body: "Rearrange into a sofa, sectional or pit whenever you like.",
+        productId: "couch",
+      },
+      {
+        x: 44,
+        y: 60,
+        title: "Corner Module",
+        body: "Clicks onto any Cloud to turn a sofa into a sectional.",
+        productId: "corner",
+      },
+      {
+        x: 43,
+        y: 76,
+        title: "Extra Ottoman",
+        body: "Lift-off top with storage for blankets and controllers.",
+        productId: "ottoman",
+      },
+      {
+        x: 5,
+        y: 52,
+        title: "Replacement Cover Set",
+        body: "A fresh set of seat, back and base covers.",
+        productId: "covers",
+      },
+    ],
+  },
+  anatomy: {
+    image: IMG.cushion,
+    ratio: "3/4",
+    alt: "Close-up of a soft cushioned seat with pillows",
+    spots: [
+      {
+        x: 36,
+        y: 63,
+        title: "Feather-blend topper",
+        body: "The soft, sink-in feel everyone talks about.",
+      },
+      {
+        x: 56,
+        y: 46,
+        title: "Fiber comfort wrap",
+        body: "Bounces back after every sit so seats never look slumped.",
+      },
+      {
+        x: 22,
+        y: 74,
+        title: "High-resilience foam core",
+        body: "Support that holds you up an hour later — and a year later.",
+      },
+      {
+        x: 30,
+        y: 88,
+        title: "Kiln-dried hardwood frame",
+        body: "Won’t warp or creak. Backed by a 10-year warranty.",
+      },
+    ],
+  },
+};
+
+export interface FinancingTerm {
+  id: string;
+  label: string;
+  months: number;
+  apr: number;
+  /** bi-weekly pay-in-4 instead of monthly */
+  payIn4?: boolean;
+}
+
+export const FINANCING_TERMS: FinancingTerm[] = [
+  { id: "p4", label: "Pay in 4", months: 2, apr: 0, payIn4: true },
+  { id: "6", label: "6 mo", months: 6, apr: 0 },
+  { id: "12", label: "12 mo", months: 12, apr: 0 },
+  { id: "24", label: "24 mo", months: 24, apr: 7.99 },
+  { id: "36", label: "36 mo", months: 36, apr: 9.99 },
+];
+
+/** Mock delivery windows (business days) by the first digit of a ZIP code. */
+export const ZIP_REGIONS: { name: string; min: number; max: number }[] = [
+  { name: "New England", min: 3, max: 5 },
+  { name: "Mid-Atlantic", min: 2, max: 4 },
+  { name: "Southeast", min: 2, max: 4 },
+  { name: "Great Lakes", min: 2, max: 4 },
+  { name: "Midwest", min: 3, max: 5 },
+  { name: "Plains", min: 3, max: 6 },
+  { name: "South Central", min: 2, max: 5 },
+  { name: "Mountain West", min: 4, max: 6 },
+  { name: "Southwest", min: 3, max: 6 },
+  { name: "West Coast", min: 4, max: 7 },
 ];

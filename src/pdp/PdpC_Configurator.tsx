@@ -7,6 +7,7 @@ import {
   LayoutGrid,
   Link2,
   Lock,
+  Ruler,
   Truck,
 } from "lucide-react";
 import {
@@ -20,6 +21,7 @@ import { useProductSelection } from "../hooks/useProductSelection";
 import { useCart } from "../context/CartContext";
 import { useUI } from "../context/UIContext";
 import { money, moneyShort, priceLabel } from "../lib/money";
+import { buildShareUrl } from "../lib/share";
 import LayoutDiagram, {
   dimsFromLayout,
   type ExtraModule,
@@ -27,6 +29,9 @@ import LayoutDiagram, {
 import { Breadcrumbs, Img, QtyStepper, Stars } from "../components/ui";
 import { FeatureCards } from "../components/Sections";
 import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
+import { FinancingCalculator } from "../components/Interactive";
+import { FabricLens } from "../components/Magnify";
+import { RoomFitChecker } from "../components/RoomFit";
 import { deliveryDate } from "./shared";
 
 const STEPS = ["Layout", "Fabric", "Add-ons", "Review"];
@@ -67,7 +72,7 @@ export default function PdpC({ product }: { product: Product }) {
   const { toast } = useUI();
   const [params] = useSearchParams();
   const [step, setStep] = useState(() => Number(params.get("step") ?? 0) || 0);
-  const [view, setView] = useState<"diagram" | "photo">("diagram");
+  const [view, setView] = useState<"diagram" | "photo" | "room">("diagram");
   const [addons, setAddons] = useState<Addons>(() => ({
     ottoman: Number(params.get("ottoman") ?? 0) || 0,
     covers: params.get("covers") === "1",
@@ -167,7 +172,7 @@ export default function PdpC({ product }: { product: Product }) {
       corner: addons.corner ? "1" : "0",
       swatches: addons.swatches ? "1" : "0",
     });
-    const url = `${window.location.origin}${window.location.pathname}#/product/${product.slug}?${q}`;
+    const url = buildShareUrl(product.slug, Object.fromEntries(q));
     try {
       await navigator.clipboard.writeText(url);
       toast("Setup link copied to clipboard", "success");
@@ -230,9 +235,10 @@ export default function PdpC({ product }: { product: Product }) {
             style={{ top: 92, overflow: "hidden" }}
           >
             <div
-              className="row between"
+              className="row between wrap"
               style={{
                 padding: "14px 16px",
+                gap: 8,
                 borderBottom: "1px solid var(--line)",
               }}
             >
@@ -251,6 +257,14 @@ export default function PdpC({ product }: { product: Product }) {
                 >
                   <span className="row" style={{ gap: 6 }}>
                     <ImageIcon size={13} /> Photo
+                  </span>
+                </button>
+                <button
+                  className={view === "room" ? "active" : ""}
+                  onClick={() => setView("room")}
+                >
+                  <span className="row" style={{ gap: 6 }}>
+                    <Ruler size={13} /> Room
                   </span>
                 </button>
               </div>
@@ -275,6 +289,18 @@ export default function PdpC({ product }: { product: Product }) {
                   widthLabel={dims.width}
                   depthLabel={dims.depth}
                   maxWidth={460}
+                />
+              </div>
+            ) : view === "room" ? (
+              <div style={{ padding: 18, minHeight: 360 }}>
+                <RoomFitChecker
+                  compact
+                  modules={allModules}
+                  color={sel.color}
+                  currentSlug={product.slug}
+                  onSuggest={(slug) =>
+                    sel.pickConfig(slug, { keepScroll: true })
+                  }
                 />
               </div>
             ) : (
@@ -438,6 +464,7 @@ export default function PdpC({ product }: { product: Product }) {
                               color={hex}
                               showDims={false}
                               maxWidth={130}
+                              maxHeight={96}
                             />
                           </div>
                           <div style={{ fontSize: 16 }}>{c.shortName}</div>
@@ -522,6 +549,9 @@ export default function PdpC({ product }: { product: Product }) {
                         </button>
                       );
                     })}
+                  </div>
+                  <div style={{ marginTop: 14 }}>
+                    <FabricLens color={sel.color} compact ratio="16/9" />
                   </div>
                   <div
                     className="card row between wrap"
@@ -781,16 +811,16 @@ export default function PdpC({ product }: { product: Product }) {
                   {money(total)}
                 </span>
               </div>
-              <p
-                className="muted"
+              <div
                 style={{
-                  fontSize: 13.5,
-                  margin: "4px 0 16px",
-                  textAlign: "right",
+                  margin: "12px 0 16px",
+                  padding: 12,
+                  borderRadius: 12,
+                  background: "var(--bg)",
                 }}
               >
-                or 4 × {money(total / 4)} interest-free
-              </p>
+                <FinancingCalculator compact amount={total} defaultTerm="p4" />
+              </div>
               <button className="btn btn-block" onClick={addSetup}>
                 <Lock size={14} /> Add setup to cart — {money(total)}
               </button>

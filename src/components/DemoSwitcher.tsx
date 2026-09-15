@@ -4,15 +4,15 @@ import { ChevronDown, FlaskConical } from "lucide-react";
 import { useUI, type Variant } from "../context/UIContext";
 import { THEME_LABELS, type ThemeName } from "../theme/themes";
 import { COUCHES, DEFAULT_PRODUCT } from "../data/products";
+import { VARIANTS, VARIANT_META } from "../data/variants";
 import { readStore, writeStore } from "../lib/money";
 
-export const VARIANT_NAMES: Record<Variant, string> = {
-  a: "Classic Gallery",
-  b: "Editorial Scroll",
-  c: "Configurator",
-  d: "Conversion",
-  e: "Long-form",
-};
+export { VARIANT_NAMES } from "../data/variants";
+
+const GROUPS: { label: string; group: "core" | "interactive" }[] = [
+  { label: "Core layouts", group: "core" },
+  { label: "Interactive", group: "interactive" },
+];
 
 /** Floating control used by testers to flip between PDP variants and themes. */
 export default function DemoSwitcher() {
@@ -44,7 +44,7 @@ export default function DemoSwitcher() {
   return (
     <div className="demo-switcher" style={{ bottom: 16 + bottomOffset }}>
       {open ? (
-        <div style={{ padding: 12, display: "grid", gap: 10, width: 262 }}>
+        <div style={{ padding: 12, display: "grid", gap: 10, width: 272 }}>
           <div className="row between">
             <span
               className="row"
@@ -75,27 +75,46 @@ export default function DemoSwitcher() {
             <div className="muted" style={{ fontSize: 11.5, marginBottom: 5 }}>
               Product page ·{" "}
               <strong style={{ color: "var(--ink)", fontWeight: 600 }}>
-                {VARIANT_NAMES[variant]}
+                {VARIANT_META[variant].name}
               </strong>
             </div>
-            <div className="seg">
-              {(["a", "b", "c", "d", "e"] as Variant[]).map((v) => (
-                <button
-                  key={v}
-                  className={
-                    variant === v && onCouchPage
-                      ? "active"
-                      : variant === v
-                        ? "active"
-                        : ""
-                  }
-                  style={{ flex: 1 }}
-                  onClick={() => pickVariant(v)}
-                  title={VARIANT_NAMES[v]}
-                >
-                  {v.toUpperCase()}
-                </button>
-              ))}
+            <div style={{ display: "grid", gap: 6 }}>
+              {GROUPS.map((g) => {
+                const list = VARIANTS.filter(
+                  (v) => VARIANT_META[v].group === g.group,
+                );
+                return (
+                  <div key={g.group}>
+                    <div
+                      className="muted"
+                      style={{
+                        fontSize: 10,
+                        letterSpacing: ".1em",
+                        textTransform: "uppercase",
+                        margin: "0 0 3px 4px",
+                      }}
+                    >
+                      {g.label}
+                    </div>
+                    <div
+                      className="seg seg-grid"
+                      style={{ gridTemplateColumns: `repeat(${list.length},1fr)` }}
+                    >
+                      {list.map((v) => (
+                        <button
+                          key={v}
+                          className={variant === v ? "active" : ""}
+                          onClick={() => pickVariant(v)}
+                          title={VARIANT_META[v].name}
+                          aria-pressed={variant === v}
+                        >
+                          {v.toUpperCase()}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div>

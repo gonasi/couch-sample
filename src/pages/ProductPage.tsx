@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState, type ComponentType } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getProduct, type Product } from "../data/products";
-import { isVariant, useUI } from "../context/UIContext";
+import { isVariant, useUI, type Variant } from "../context/UIContext";
 import { useCart } from "../context/CartContext";
 import { money, priceLabel } from "../lib/money";
 import { Breadcrumbs, Img, QtyStepper, TrustRow } from "../components/ui";
@@ -11,7 +11,25 @@ import PdpB from "../pdp/PdpB_EditorialScroll";
 import PdpC from "../pdp/PdpC_Configurator";
 import PdpD from "../pdp/PdpD_Conversion";
 import PdpE from "../pdp/PdpE_LongForm";
+
+// The interactive concepts are heavier; load them on demand.
+const PdpF = lazy(() => import("../pdp/PdpF_RoomPlanner"));
+const PdpG = lazy(() => import("../pdp/PdpG_StyleQuiz"));
+const PdpH = lazy(() => import("../pdp/PdpH_ImmersiveScroll"));
+const PdpI = lazy(() => import("../pdp/PdpI_MobileApp"));
 import NotFound from "./NotFound";
+
+const PDPS: Record<Variant, ComponentType<{ product: Product }>> = {
+  a: PdpA,
+  b: PdpB,
+  c: PdpC,
+  d: PdpD,
+  e: PdpE,
+  f: PdpF,
+  g: PdpG,
+  h: PdpH,
+  i: PdpI,
+};
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -34,18 +52,22 @@ export default function ProductPage() {
   if (!product) return <NotFound />;
   if (product.kind === "accessory") return <AccessoryPage product={product} />;
 
-  switch (isVariant(v) ? v : variant) {
-    case "b":
-      return <PdpB product={product} />;
-    case "c":
-      return <PdpC product={product} />;
-    case "d":
-      return <PdpD product={product} />;
-    case "e":
-      return <PdpE product={product} />;
-    default:
-      return <PdpA product={product} />;
-  }
+  const Pdp = PDPS[isVariant(v) ? v : variant];
+  return (
+    <Suspense
+      fallback={
+        <div
+          className="container row"
+          style={{ minHeight: "60vh", justifyContent: "center" }}
+          aria-busy="true"
+        >
+          <span className="spinner" />
+        </div>
+      }
+    >
+      <Pdp product={product} />
+    </Suspense>
+  );
 }
 
 function AccessoryPage({ product }: { product: Product }) {

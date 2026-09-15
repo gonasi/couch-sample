@@ -11,6 +11,12 @@ import { Accordion, Breadcrumbs, Img, QtyStepper, Stars } from "../components/ui
 import { ComparisonTable, UgcStrip } from "../components/Sections";
 import { Lightbox } from "../components/Overlays";
 import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
+import {
+  FinancingModal,
+  Hotspots,
+  SaveShare,
+} from "../components/Interactive";
+import { WipeTest } from "../components/Magnify";
 import { deliveryDate, detailItems, pad2, scrollToId, useCountdown } from "./shared";
 
 const short = (n: number) => money(n).replace(".00", "");
@@ -25,6 +31,8 @@ export default function PdpE({ product }: { product: Product }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [quoteIdx, setQuoteIdx] = useState(0);
   const [showBar, setShowBar] = useState(false);
+  const [financing, setFinancing] = useState(false);
+  const [layer, setLayer] = useState<number | null>(null);
   const buyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => setActive(0), [sel.color, product.slug]);
@@ -147,6 +155,13 @@ export default function PdpE({ product }: { product: Product }) {
                 <span className="pill">#1 best-selling modular</span>
                 <span className="pill pill-accent">{pctOff}% off today</span>
               </div>
+              <div style={{ position: "absolute", top: 14, right: 14 }}>
+                <SaveShare
+                  slug={product.slug}
+                  color={sel.color}
+                  title={product.name}
+                />
+              </div>
               <button
                 className="icon-btn"
                 onClick={() => setLightbox(active)}
@@ -256,13 +271,13 @@ export default function PdpE({ product }: { product: Product }) {
                 {short(Math.ceil(sel.price / 12))}/mo
               </strong>{" "}
               at 0% APR or 4 × {money(sel.split)} interest-free.{" "}
-              <Link
-                to="/support/financing"
-                className="muted"
-                style={{ textDecoration: "underline" }}
+              <button
+                className="text-btn muted"
+                style={{ fontSize: 14 }}
+                onClick={() => setFinancing(true)}
               >
                 Check eligibility
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -798,6 +813,30 @@ export default function PdpE({ product }: { product: Product }) {
             ))}
           </div>
         </div>
+        <div
+          className="card grid-auto"
+          style={{
+            ["--min" as string]: "280px",
+            ["--gap" as string]: "32px",
+            maxWidth: 980,
+            margin: "20px auto 0",
+            padding: 28,
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <span className="eyebrow">Try it yourself</span>
+            <h3 className="display h3" style={{ margin: "8px 0 10px" }}>
+              Wipe the spill
+            </h3>
+            <p className="muted" style={{ margin: 0, fontSize: 15.5, lineHeight: 1.6 }}>
+              “Stains are forever” doesn’t apply here. Pick a spill, then drag
+              across it the way you would with a damp cloth. The performance
+              weave keeps liquid on the surface until you wipe it away.
+            </p>
+          </div>
+          <WipeTest color={sel.color} />
+        </div>
       </section>
 
       {/* ---------- Anatomy ---------- */}
@@ -809,13 +848,7 @@ export default function PdpE({ product }: { product: Product }) {
           alignItems: "center",
         }}
       >
-        <Img
-          src={IMG.cushion}
-          alt="Cushion detail"
-          w={1000}
-          ratio="4/5"
-          radius="var(--radius)"
-        />
+        <Hotspots sceneId="anatomy" mode="info" onActive={setLayer} />
         <div>
           <span className="eyebrow">Inside the cushion</span>
           <h2 className="display h2" style={{ margin: "10px 0 24px" }}>
@@ -845,8 +878,12 @@ export default function PdpE({ product }: { product: Product }) {
               style={{
                 gap: 16,
                 alignItems: "flex-start",
-                padding: "14px 0",
+                padding: "14px 10px",
+                margin: "0 -10px",
                 borderTop: "1px solid var(--line)",
+                borderRadius: 10,
+                background: layer === i ? "var(--soft)" : undefined,
+                transition: "background .2s",
               }}
             >
               <span
@@ -1082,6 +1119,11 @@ export default function PdpE({ product }: { product: Product }) {
         index={lightbox}
         onClose={() => setLightbox(null)}
         onIndex={setLightbox}
+      />
+      <FinancingModal
+        open={financing}
+        onClose={() => setFinancing(false)}
+        amount={sel.price * sel.qty}
       />
     </div>
   );
