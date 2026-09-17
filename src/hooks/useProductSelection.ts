@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   COLORS,
@@ -70,9 +70,37 @@ export function useProductSelection(product: Product) {
   const [qty, setQty] = useState(1);
 
   useEffect(() => setQty(1), [product.slug]);
-  // Geometry axes differ per product (SF-1 has CUSHION), so reset when the product changes.
-  useEffect(() => setSpinCfg(geomFromParams(product.slug, params)), [product.slug]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => writeStore("gh2-fabric", color), []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /*
+   * The useState initialisers above only run on mount, but this is a HashRouter: moving
+   * between two configuration links is a hash change, not a page load, so the component
+   * never remounts and a pasted ?color= would be ignored while the URL claimed otherwise.
+   *
+   * Re-apply a param only when the param itself changes - comparing against the last value
+   * we saw rather than against state. Picking a fabric in the UI does not touch the URL, so
+   * this never fights the user's own selection.
+   */
+  const colorParam = params.get("color");
+  const lastColorParam = useRef(colorParam);
+  useEffect(() => {
+    if (colorParam === lastColorParam.current) return;
+    lastColorParam.current = colorParam;
+    const c = colorFromParam(colorParam);
+    if (c) setColorState(c);
+  }, [colorParam]);
+
+  // Geometry axes differ per product (SF-1 has CUSHION), so the product slug is part of
+  // the key: changing product re-derives geometry from that product's own defaults.
+  const geomKey = `${product.slug}|${geomAxes(product.slug)
+    .map((a) => params.get(a.toLowerCase()) ?? "")
+    .join(",")}`;
+  const lastGeomKey = useRef(geomKey);
+  useEffect(() => {
+    if (geomKey === lastGeomKey.current) return;
+    lastGeomKey.current = geomKey;
+    setSpinCfg(geomFromParams(product.slug, params));
+  }, [geomKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const setColor = (c: string) => {
     setColorState(c);
