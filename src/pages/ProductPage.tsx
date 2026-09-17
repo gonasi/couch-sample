@@ -17,6 +17,7 @@ const PdpF = lazy(() => import("../pdp/PdpF_RoomPlanner"));
 const PdpG = lazy(() => import("../pdp/PdpG_StyleQuiz"));
 const PdpH = lazy(() => import("../pdp/PdpH_ImmersiveScroll"));
 const PdpI = lazy(() => import("../pdp/PdpI_MobileApp"));
+const PdpJ = lazy(() => import("../pdp/PdpJ_GuidedSteps"));
 import NotFound from "./NotFound";
 
 const PDPS: Record<Variant, ComponentType<{ product: Product }>> = {
@@ -29,6 +30,7 @@ const PDPS: Record<Variant, ComponentType<{ product: Product }>> = {
   g: PdpG,
   h: PdpH,
   i: PdpI,
+  j: PdpJ,
 };
 
 export default function ProductPage() {

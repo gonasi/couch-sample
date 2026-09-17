@@ -17,17 +17,23 @@ export function ConfigOptions({
   cfg,
   fabricCode,
   onChange,
+  only,
+  hideLabel,
 }: {
   productSlug: string;
   cfg: SpinConfig;
   fabricCode: string;
   onChange: (axis: string, code: string) => void;
+  /** Render just these axes, for layouts that split them across sections. */
+  only?: string[];
+  hideLabel?: boolean;
 }) {
   const set = setForProduct(productSlug);
   if (!set) return null;
 
   const axes = Object.keys(set.optionCodes)
     .filter((a) => a !== "FABRIC")
+    .filter((a) => !only || only.includes(a))
     .sort((a, b) => {
       const ia = AXIS_ORDER.indexOf(a);
       const ib = AXIS_ORDER.indexOf(b);
@@ -38,7 +44,7 @@ export function ConfigOptions({
     <div className="stack" style={{ ["--gap" as string]: "12px" }}>
       {axes.map((axis) => (
         <div key={axis}>
-          <span className="label">{set.labels[axis]?.[axis] ?? titleOf(axis)}</span>
+          {!hideLabel && <span className="label">{titleOf(axis)}</span>}
           <div
             className="row wrap"
             style={{ gap: 8, marginTop: 7 }}

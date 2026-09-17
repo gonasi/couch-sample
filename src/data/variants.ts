@@ -1,7 +1,7 @@
 // PDP variant registry: names, tester blurbs and page chrome for each design.
 
-export type Variant = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i";
-export const VARIANTS: Variant[] = ["a", "b", "c", "d", "e", "f", "g", "h", "i"];
+export type Variant = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j";
+export const VARIANTS: Variant[] = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
 export const isVariant = (s: string | null | undefined): s is Variant =>
   VARIANTS.includes(s as Variant);
 
@@ -20,7 +20,7 @@ export const DEFAULT_CHROME: Chrome = {
 export interface VariantMeta {
   name: string;
   blurb: string;
-  group: "core" | "interactive";
+  group: "core" | "interactive" | "reference";
   chrome: Chrome;
 }
 
@@ -87,6 +87,13 @@ export const VARIANT_META: Record<Variant, VariantMeta> = {
       "App-style page: swipe gallery, double-tap to save, tabs and a draggable bottom-sheet buy box.",
     group: "interactive",
     chrome: { ticker: false, header: "solid", footer: false },
+  },
+  j: {
+    name: "Guided Steps",
+    blurb:
+      "Retail-reference layout: 360 stage with a thumb rail, numbered option steps that restate each choice, fabric family tabs, to-scale proportions and a scan-to-phone handoff.",
+    group: "reference",
+    chrome: DEFAULT_CHROME,
   },
 };
 

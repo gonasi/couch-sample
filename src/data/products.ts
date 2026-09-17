@@ -25,28 +25,33 @@ export type ColorName =
   | "Snowdrift"
   | "Sesame";
 
+/** Weave families, used to group the swatch grid into tabs. */
+export type FabricFamily = "Performance" | "Chenille" | "Corduroy";
+export const FABRIC_FAMILIES: FabricFamily[] = ["Performance", "Chenille", "Corduroy"];
+
 export interface Fabric {
   name: ColorName;
   code: string;
   slug: string;
   hex: string;
   stock: number;
+  family: FabricFamily;
 }
 
 export const COLORS: Fabric[] = [
-  { name: "Storm Grey",    code: "STORM GREY",            slug: "storm-grey",    hex: "#605d5c", stock: 14 },
-  { name: "Sunset Beige",  code: "SUNSET BEIGE",          slug: "sunset-beige",  hex: "#d7d0be", stock: 9 },
-  { name: "Dream Grey",    code: "DREAM GREY",            slug: "dream-grey",    hex: "#a7a19d", stock: 11 },
-  { name: "Celeste",       code: "CELESTE",               slug: "celeste",       hex: "#515c5e", stock: 5 },
-  { name: "Night Sky",     code: "CIELLO - NIGHT SKY",    slug: "night-sky",     hex: "#273954", stock: 6 },
-  { name: "Opal White",    code: "CIELLO - OPAL WHITE",   slug: "opal-white",    hex: "#ede8e3", stock: 12 },
-  { name: "Cypress Green", code: "CIELLO - CYPRESS GREEN", slug: "cypress-green", hex: "#54583c", stock: 4 },
-  { name: "Dune",          code: "CIELLO - DUNE",         slug: "dune",          hex: "#9f9383", stock: 8 },
-  { name: "Basalt",        code: "CIELLO - BASALT",       slug: "basalt",        hex: "#5d605f", stock: 7 },
-  { name: "Limestone",     code: "CIELLO - LIMESTONE",    slug: "limestone",     hex: "#b2b3b1", stock: 10 },
-  { name: "Mocha",         code: "CIELLO - MOCHA",        slug: "mocha",         hex: "#7f6b5d", stock: 3 },
-  { name: "Snowdrift",     code: "CIELLO - SNOWDRIFT",    slug: "snowdrift",     hex: "#e6e2d9", stock: 13 },
-  { name: "Sesame",        code: "CIELLO - SESAME",       slug: "sesame",        hex: "#cabfb3", stock: 6 },
+  { name: "Storm Grey",    code: "STORM GREY",            slug: "storm-grey",    hex: "#605d5c", stock: 14 , family: "Performance" },
+  { name: "Sunset Beige",  code: "SUNSET BEIGE",          slug: "sunset-beige",  hex: "#d7d0be", stock: 9 , family: "Performance" },
+  { name: "Dream Grey",    code: "DREAM GREY",            slug: "dream-grey",    hex: "#a7a19d", stock: 11 , family: "Performance" },
+  { name: "Celeste",       code: "CELESTE",               slug: "celeste",       hex: "#515c5e", stock: 5 , family: "Chenille" },
+  { name: "Night Sky",     code: "CIELLO - NIGHT SKY",    slug: "night-sky",     hex: "#273954", stock: 6 , family: "Chenille" },
+  { name: "Opal White",    code: "CIELLO - OPAL WHITE",   slug: "opal-white",    hex: "#ede8e3", stock: 12 , family: "Chenille" },
+  { name: "Cypress Green", code: "CIELLO - CYPRESS GREEN", slug: "cypress-green", hex: "#54583c", stock: 4 , family: "Corduroy" },
+  { name: "Dune",          code: "CIELLO - DUNE",         slug: "dune",          hex: "#9f9383", stock: 8 , family: "Corduroy" },
+  { name: "Basalt",        code: "CIELLO - BASALT",       slug: "basalt",        hex: "#5d605f", stock: 7 , family: "Chenille" },
+  { name: "Limestone",     code: "CIELLO - LIMESTONE",    slug: "limestone",     hex: "#b2b3b1", stock: 10 , family: "Chenille" },
+  { name: "Mocha",         code: "CIELLO - MOCHA",        slug: "mocha",         hex: "#7f6b5d", stock: 3 , family: "Performance" },
+  { name: "Snowdrift",     code: "CIELLO - SNOWDRIFT",    slug: "snowdrift",     hex: "#e6e2d9", stock: 13 , family: "Chenille" },
+  { name: "Sesame",        code: "CIELLO - SESAME",       slug: "sesame",        hex: "#cabfb3", stock: 6 , family: "Chenille" },
 ];
 
 export const DEFAULT_COLOR: ColorName = "Storm Grey";

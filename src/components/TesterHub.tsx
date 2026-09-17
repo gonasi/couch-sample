@@ -9,6 +9,7 @@ import { readStore, writeStore } from "../lib/money";
 const GROUPS = [
   { group: "core", title: "Core page layouts", range: "A–E" },
   { group: "interactive", title: "Interactive concepts", range: "F–I", isNew: true },
+  { group: "reference", title: "Retail reference", range: "J", isNew: true },
 ] as const;
 
 /** Links for product testers to open each PDP variant. Shown at the top of the home page. */

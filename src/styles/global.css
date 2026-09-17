@@ -1351,3 +1351,50 @@ details summary::-webkit-details-marker {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+
+/* ---------- variant J: stage with a left thumbnail rail ---------- */
+.stage-with-rail {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+.stage-rail {
+  display: grid;
+  gap: 8px;
+}
+.rail-thumb {
+  position: relative;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.rail-thumb.active {
+  border: 2px solid var(--ink);
+}
+.key-points {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 7px;
+  font-size: 14.5;
+}
+@media (max-width: 760px) {
+  /* The rail becomes a strip under the stage; a 64px column is too much on a phone. */
+  .stage-with-rail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .stage-rail {
+    grid-auto-flow: column;
+    grid-auto-columns: 62px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    order: 2;
+  }
+  .stage-rail::-webkit-scrollbar { display: none; }
+}
