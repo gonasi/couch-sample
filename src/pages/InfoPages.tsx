@@ -3,7 +3,7 @@ import { Link, NavLink, useParams } from "react-router-dom";
 import { useUI } from "../context/UIContext";
 import { POLICIES, SUPPORT_LINKS, SUPPORT_TOPICS } from "../data/content";
 import { IMG } from "../data/images";
-import { COLORS, COUCHES } from "../data/products";
+import { COUCHES, colorHex } from "../data/products";
 import { Accordion, Breadcrumbs, Img } from "../components/ui";
 import LayoutDiagram, { dimsFromLayout } from "../components/LayoutDiagram";
 import { UgcStrip } from "../components/Sections";
@@ -98,7 +98,7 @@ export function Support() {
                     >
                       <LayoutDiagram
                         modules={c.layout!}
-                        color={COLORS[2].hex}
+                        color={colorHex("Dream Grey")}
                         widthLabel={d.width}
                         depthLabel={d.depth}
                         maxWidth={260}

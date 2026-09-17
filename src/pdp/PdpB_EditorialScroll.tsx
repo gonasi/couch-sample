@@ -3,6 +3,7 @@ import { COUCHES, type Product } from "../data/products";
 import { IMG } from "../data/images";
 import { REVIEWS, REVIEW_STATS } from "../data/reviews";
 import { useProductSelection } from "../hooks/useProductSelection";
+import { ProductStage } from "../components/ProductStage";
 import { useUI } from "../context/UIContext";
 import { money, moneyShort } from "../lib/money";
 import { Img, Swatches } from "../components/ui";
@@ -53,7 +54,8 @@ export default function PdpB({ product }: { product: Product }) {
           overflow: "hidden",
         }}
       >
-        <Img
+        <ProductStage
+          spin={sel.spin}
           src={sel.images[0]}
           alt={product.name}
           w={2400}

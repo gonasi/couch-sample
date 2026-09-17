@@ -2,7 +2,7 @@ import { IMG } from "./images";
 
 export const TICKER = [
   "Up to $2,000 Off (30%) — Ends Soon",
-  "Khaki and Black are Back with Limited Stock!",
+  "Cypress Green and Night Sky are Back with Limited Stock!",
   "No sales tax collected at checkout",
   "Free shipping across the lower 48",
 ];

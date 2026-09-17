@@ -1,16 +1,76 @@
 import { IMG } from "./images";
+import { asset as assetUrl, defaultConfig, stillFor } from "../lib/spin";
 
-export type ColorName = "White" | "Black" | "Light Grey" | "Khaki";
+/**
+ * The 13 Ciello fabrics, mirrored from Cylindo.
+ *  - `name` is the display label and the value carried in cart lines and app state.
+ *  - `code` is the exact option code the render API expects ("CIELLO - NIGHT SKY").
+ *  - `slug` is what goes in URLs. Never put `name` in a URL: buildShareUrl puts the query
+ *    inside the hash and URLSearchParams encodes spaces as "+".
+ *  - `hex` is sampled from the real render, and backs the decorative SVG weave / isometric
+ *    couch, which cannot use a photo.
+ */
+export type ColorName =
+  | "Storm Grey"
+  | "Sunset Beige"
+  | "Dream Grey"
+  | "Celeste"
+  | "Night Sky"
+  | "Opal White"
+  | "Cypress Green"
+  | "Dune"
+  | "Basalt"
+  | "Limestone"
+  | "Mocha"
+  | "Snowdrift"
+  | "Sesame";
 
-export const COLORS: { name: ColorName; hex: string; stock: number }[] = [
-  { name: "White", hex: "#FAFAF8", stock: 14 },
-  { name: "Black", hex: "#22221F", stock: 6 },
-  { name: "Light Grey", hex: "#C9C7C1", stock: 11 },
-  { name: "Khaki", hex: "#B6A27C", stock: 4 },
+export interface Fabric {
+  name: ColorName;
+  code: string;
+  slug: string;
+  hex: string;
+  stock: number;
+}
+
+export const COLORS: Fabric[] = [
+  { name: "Storm Grey",    code: "STORM GREY",            slug: "storm-grey",    hex: "#605d5c", stock: 14 },
+  { name: "Sunset Beige",  code: "SUNSET BEIGE",          slug: "sunset-beige",  hex: "#d7d0be", stock: 9 },
+  { name: "Dream Grey",    code: "DREAM GREY",            slug: "dream-grey",    hex: "#a7a19d", stock: 11 },
+  { name: "Celeste",       code: "CELESTE",               slug: "celeste",       hex: "#515c5e", stock: 5 },
+  { name: "Night Sky",     code: "CIELLO - NIGHT SKY",    slug: "night-sky",     hex: "#273954", stock: 6 },
+  { name: "Opal White",    code: "CIELLO - OPAL WHITE",   slug: "opal-white",    hex: "#ede8e3", stock: 12 },
+  { name: "Cypress Green", code: "CIELLO - CYPRESS GREEN", slug: "cypress-green", hex: "#54583c", stock: 4 },
+  { name: "Dune",          code: "CIELLO - DUNE",         slug: "dune",          hex: "#9f9383", stock: 8 },
+  { name: "Basalt",        code: "CIELLO - BASALT",       slug: "basalt",        hex: "#5d605f", stock: 7 },
+  { name: "Limestone",     code: "CIELLO - LIMESTONE",    slug: "limestone",     hex: "#b2b3b1", stock: 10 },
+  { name: "Mocha",         code: "CIELLO - MOCHA",        slug: "mocha",         hex: "#7f6b5d", stock: 3 },
+  { name: "Snowdrift",     code: "CIELLO - SNOWDRIFT",    slug: "snowdrift",     hex: "#e6e2d9", stock: 13 },
+  { name: "Sesame",        code: "CIELLO - SESAME",       slug: "sesame",        hex: "#cabfb3", stock: 6 },
 ];
 
-export const colorHex = (name: string) =>
-  COLORS.find((c) => c.name === name)?.hex ?? "#FAFAF8";
+export const DEFAULT_COLOR: ColorName = "Storm Grey";
+
+export const fabricByName = (name: string) => COLORS.find((c) => c.name === name);
+export const fabricBySlug = (slug: string) => COLORS.find((c) => c.slug === slug);
+export const isColorName = (v: string): v is ColorName =>
+  COLORS.some((c) => c.name === v);
+
+/** Swatch photo mirrored from Cozey. Celeste has no closeup upstream - callers fall back to hex. */
+export const swatchUrl = (name: string) => {
+  const f = fabricByName(name);
+  return f && f.slug !== "celeste" ? assetUrl(`fabrics/${f.slug}.jpg`) : null;
+};
+
+export const colorHex = (name: string) => {
+  const f = fabricByName(name);
+  if (!f && import.meta.env.DEV) {
+    // Silent-white-couch guard: without this, a missed call site just renders the fallback
+    // and looks plausible. Make a miss loud in dev.
+    console.warn(`[products] colorHex("${name}") is not a known fabric - falling back`);
+  }
+  return f?.hex ?? "#605d5c";
+};
 
 export type ModuleKind = "corner" | "seat" | "ottoman";
 export interface Module {
@@ -35,7 +95,6 @@ export interface Product {
   description: string;
   dims?: { overall: string; seat: string; boxes: string; doorway: string };
   layout?: Module[];
-  colorImages?: Record<ColorName, string>;
   images: string[];
   bestSeller?: boolean;
 }
@@ -66,12 +125,6 @@ export const COUCHES: Product[] = [
       { x: 2, y: 0, kind: "corner", back: ["n", "e"] },
       { x: 1, y: 1, kind: "ottoman", back: [] },
     ],
-    colorImages: {
-      White: IMG.whiteLiving,
-      Black: IMG.blackSofa,
-      "Light Grey": IMG.greySectional,
-      Khaki: IMG.beigeSofa,
-    },
     images: [
       IMG.greySectional,
       IMG.sunnyLiving,
@@ -107,12 +160,6 @@ export const COUCHES: Product[] = [
       { x: 3, y: 0, kind: "corner", back: ["n", "e"] },
       { x: 3, y: 1, kind: "ottoman", back: [] },
     ],
-    colorImages: {
-      White: IMG.whiteSofaLiving,
-      Black: IMG.darkSectional,
-      "Light Grey": IMG.greyMinimal,
-      Khaki: IMG.beigeSectional,
-    },
     images: [
       IMG.greyMinimal,
       IMG.whiteLiving,
@@ -148,12 +195,6 @@ export const COUCHES: Product[] = [
       { x: 1, y: 1, kind: "ottoman", back: [] },
       { x: 2, y: 1, kind: "ottoman", back: [] },
     ],
-    colorImages: {
-      White: IMG.whiteGreySofa,
-      Black: IMG.darkSectional,
-      "Light Grey": IMG.greyLiving,
-      Khaki: IMG.beigeSectional,
-    },
     images: [
       IMG.greyLiving,
       IMG.darkSectional,
@@ -189,12 +230,6 @@ export const COUCHES: Product[] = [
       { x: 0, y: 2, kind: "seat", back: ["w"] },
       { x: 1, y: 1, kind: "ottoman", back: [] },
     ],
-    colorImages: {
-      White: IMG.whiteSofaRoom,
-      Black: IMG.blackSofa,
-      "Light Grey": IMG.greyLivingSofa,
-      Khaki: IMG.beigeSofa,
-    },
     images: [
       IMG.whiteSofaRoom,
       IMG.wideLiving,
@@ -268,10 +303,17 @@ export const getById = (id: string) => ALL_PRODUCTS.find((p) => p.id === id)!;
 
 export const DEFAULT_PRODUCT = "5-piece-cloud";
 
+/** Hero render for a product in a fabric, at that product's default geometry. */
+export function heroRender(product: Product, color: string): string | null {
+  const cfg = defaultConfig(product.slug);
+  const fab = fabricByName(color);
+  return cfg && fab ? stillFor(product.slug, { ...cfg, FABRIC: fab.code }) : null;
+}
+
+/** The real Cylindo render first, then the lifestyle photography. */
 export function galleryFor(product: Product, color: string) {
-  const hero = product.colorImages?.[color as ColorName] ?? product.images[0];
-  const rest = product.images.filter((img) => img !== hero);
-  return [hero, ...rest].slice(0, 5);
+  const hero = heroRender(product, color);
+  return (hero ? [hero, ...product.images] : product.images).slice(0, 5);
 }
 
 export const splitPay = (price: number) => price / 4;

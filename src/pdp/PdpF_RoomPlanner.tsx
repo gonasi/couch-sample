@@ -18,11 +18,12 @@ import {
 import {
   COUCHES,
   colorHex,
-  type ColorName,
+  heroRender,
   type ModuleKind,
   type Product,
 } from "../data/products";
 import { useProductSelection } from "../hooks/useProductSelection";
+import { ProductStage } from "../components/ProductStage";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { useBottomOffset } from "../hooks/useBottomOffset";
 import { useCart } from "../context/CartContext";
@@ -246,7 +247,7 @@ export default function PdpF({ product }: { product: Product }) {
       compare: custom.compare,
       blurb: "",
       description: "",
-      images: [near.colorImages?.[sel.color as ColorName] ?? near.images[0]],
+      images: [heroRender(near, sel.color) ?? near.images[0]],
     };
     cart.add(build, {
       color: sel.color,
@@ -995,6 +996,15 @@ export default function PdpF({ product }: { product: Product }) {
             className="stack sticky-col"
             style={{ ["--gap" as string]: "14px", top: 92 }}
           >
+            {/* The planner is to-scale but abstract; this is what it actually looks like. */}
+            <div className="card" style={{ overflow: "hidden" }}>
+              <ProductStage
+                spin={sel.spin}
+                src={sel.images[0]}
+                alt={`${product.name} in ${sel.color}`}
+                ratio="4/3"
+              />
+            </div>
             <div className="card card-pad" style={{ display: "grid", gap: 12 }}>
               <div className="row between" style={{ gap: 8 }}>
                 <span className="label">Your build</span>

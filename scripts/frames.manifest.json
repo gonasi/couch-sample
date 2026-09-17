@@ -1,0 +1,52 @@
+{
+  "_doc": "INPUT manifest for scripts/fetch-frames.mjs. Edit this to change asset volume, then re-run `npm run frames -- --dry-run`. The OUTPUT manifest (src/data/spin.generated.ts) is produced by scanning public/frames after a run - never edit that by hand.",
+
+  "rev": 1,
+  "endpoint": "https://content.cylindo.com/api/v2/5035/products",
+  "encoding": "webp",
+  "removeEnvironmentShadow": false,
+  "size": 640,
+  "frameCount": 32,
+
+  "fabricSwatch": {
+    "base": "https://media.cozey.com/dh1tvhccu/image/upload/f_auto,q_auto/01-ciello-fabric-",
+    "query": "?speedsize=w_320",
+    "out": "public/fabrics"
+  },
+
+  "products": [
+    { "sku": "CIELLO - SF - 1", "productSlug": "4-piece-pit-cloud",        "_note": "carries the extra CUSHION axis; ARMS:LOW + CUSHION:ON is invalid at source (4 combos)" },
+    { "sku": "CIELLO - SF - 2", "productSlug": "6-piece-corner-pit-cloud" },
+    { "sku": "CIELLO - SF - 3", "productSlug": "5-piece-cloud",            "_note": "DEFAULT_PRODUCT + the exact sofa from the Cozey URL. Tier 2 hero." },
+    { "sku": "CIELLO - SF - 4", "productSlug": "6-piece-pit-cloud" }
+  ],
+
+  "anchorFabrics": ["STORM GREY", "CIELLO - SESAME"],
+
+  "tiers": [
+    {
+      "id": 1,
+      "name": "full spin, every fabric, default geometry",
+      "skus": "*",
+      "geometry": "default",
+      "fabrics": "*",
+      "frames": "*"
+    },
+    {
+      "id": 2,
+      "name": "full spin, every geometry, anchor fabrics (hero SKU only)",
+      "skus": ["CIELLO - SF - 3"],
+      "geometry": "*",
+      "fabrics": "anchors",
+      "frames": "*"
+    },
+    {
+      "id": 3,
+      "name": "single still for every remaining valid combo",
+      "skus": "*",
+      "geometry": "*",
+      "fabrics": "*",
+      "frames": [1]
+    }
+  ]
+}

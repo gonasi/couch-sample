@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, ShoppingBag } from "lucide-react";
 import { COUCHES, colorHex, type Product } from "../data/products";
 import { useProductSelection } from "../hooks/useProductSelection";
+import { ProductStage } from "../components/ProductStage";
 import { useScrollProgress } from "../hooks/useScrollProgress";
 import { useInView } from "../hooks/useInView";
 import {
@@ -22,7 +23,7 @@ import IsoCouch, {
 } from "../components/IsoCouch";
 import { Hotspots } from "../components/Interactive";
 import { FabricLens, WipeTest } from "../components/Magnify";
-import { Img, Stars, Swatches } from "../components/ui";
+import { Stars, Swatches } from "../components/ui";
 import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
 import BuyBoxCompact from "./BuyBoxCompact";
 import { scrollToId } from "./shared";
@@ -55,7 +56,7 @@ const CHAPTERS = [
   },
 ];
 const N = CHAPTERS.length;
-const CYCLE = ["White", "Light Grey", "Khaki", "Black"].map(colorHex);
+const CYCLE = ["Opal White", "Dream Grey", "Dune", "Night Sky"].map(colorHex);
 
 /** Pure scene for chapter `ch` at local progress `t` (0–1). */
 function sceneAt(
@@ -386,7 +387,8 @@ export default function PdpH({ product }: { product: Product }) {
             alignItems: "center",
           }}
         >
-          <Img
+          <ProductStage
+            spin={sel.spin}
             src={sel.images[0]}
             alt={`${product.name} in ${sel.color}`}
             w={1400}

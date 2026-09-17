@@ -152,19 +152,31 @@ const SIZE_SCORES = [
 ];
 const MAX_SIZE_SCORE = 10;
 
-const VIBE_COLOR: ColorName[] = ["White", "Black", "Khaki", "Light Grey"];
+/** One fabric per "vibe" answer: bright, moody, warm, calm. */
+const VIBE_COLOR: ColorName[] = ["Opal White", "Night Sky", "Dune", "Dream Grey"];
+
+/** Pets/kids nudge: penalise the palest fabrics, favour mid-tones that hide fur. */
 const PET_ADJUST: Partial<Record<ColorName, number>>[] = [
   {},
-  { White: -1, "Light Grey": 1, Khaki: 1 },
-  { "Light Grey": 1, Khaki: 1 },
-  { White: -1, "Light Grey": 2, Black: 1 },
+  { "Opal White": -2, Snowdrift: -2, "Dream Grey": 1, Dune: 1, Sesame: 1 },
+  { "Dream Grey": 1, Limestone: 1, Sesame: 1, Basalt: 1 },
+  { "Opal White": -2, Snowdrift: -2, "Storm Grey": 2, Basalt: 2, "Night Sky": 1 },
 ];
 
 const COLOR_REASON: Record<ColorName, string> = {
-  White: "White keeps a bright room feeling light and open",
-  Black: "Black grounds a moody room and hides everyday wear",
-  Khaki: "Khaki warms up wood, linen and plants",
-  "Light Grey": "Light Grey stays calm and hides fur and crumbs",
+  "Storm Grey": "Storm Grey is the everyday neutral - it hides wear and suits any room",
+  "Sunset Beige": "Sunset Beige warms up wood, linen and plants",
+  "Dream Grey": "Dream Grey stays calm and hides fur and crumbs",
+  Celeste: "Celeste reads deep and cool without going fully dark",
+  "Night Sky": "Night Sky grounds a moody room and hides everyday wear",
+  "Opal White": "Opal White keeps a bright room feeling light and open",
+  "Cypress Green": "Cypress Green brings the garden indoors without shouting",
+  Dune: "Dune is a soft sand tone that flatters warm wood",
+  Basalt: "Basalt is a dark neutral that stays soft rather than stark",
+  Limestone: "Limestone is a quiet mid-grey that works in low light",
+  Mocha: "Mocha adds warmth and forgives spills",
+  Snowdrift: "Snowdrift is the lightest option - best without pets",
+  Sesame: "Sesame is an easy oat tone that hides crumbs",
 };
 
 export interface Recommendation {

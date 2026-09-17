@@ -373,7 +373,7 @@ const SPILLS: Record<
 const GRID = 26;
 const STROKE = 26; // wipe radius in viewBox units
 
-export function WipeTest({ color = "Light Grey" }: { color?: string }) {
+export function WipeTest({ color = "Dream Grey" }: { color?: string }) {
   const uid = useId().replace(/:/g, "");
   const reduced = usePrefersReducedMotion();
   const [kind, setKind] = useState<SpillKind>("coffee");

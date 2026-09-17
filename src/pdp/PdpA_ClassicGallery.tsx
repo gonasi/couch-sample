@@ -18,6 +18,8 @@ import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
 import { Lightbox } from "../components/Overlays";
 import VideoModal from "../components/VideoModal";
 import { ZoomLens } from "../components/Magnify";
+import { ProductStage, isSpinnable } from "../components/ProductStage";
+import { ConfigOptions } from "../components/FeaturePicker";
 import { ConfigCompareModal, SaveShare } from "../components/Interactive";
 import { RoomFitChecker } from "../components/RoomFit";
 import { detailItems, scrollToId } from "./shared";
@@ -57,18 +59,10 @@ export default function PdpA({ product }: { product: Product }) {
           style={{ display: "grid", gap: 12, top: 92 }}
         >
           <div style={{ position: "relative" }}>
-            <button
-              onClick={() => setLightbox(active)}
-              style={{
-                padding: 0,
-                border: 0,
-                background: "none",
-                cursor: "zoom-in",
-                display: "block",
-                width: "100%",
-              }}
-              aria-label="Open image viewer"
-            >
+            {active === 0 && isSpinnable(sel.spin) ? (
+              /* Outside the <button> on purpose: a drag that starts and ends inside a
+                 button fires a click on pointerup, which would open the Lightbox on
+                 every spin. Double-click and the corner icon still expand. */
               <div
                 style={{
                   border: "1px solid var(--line)",
@@ -76,15 +70,45 @@ export default function PdpA({ product }: { product: Product }) {
                   overflow: "hidden",
                 }}
               >
-                <ZoomLens
-                  src={sel.images[active]}
+                <ProductStage
+                  spin={sel.spin}
+                  src={sel.images[0]}
                   alt={`${product.name} in ${sel.color}`}
-                  w={1400}
                   ratio="4/3"
                   eager
+                  onExpand={() => setLightbox(0)}
                 />
               </div>
-            </button>
+            ) : (
+              <button
+                onClick={() => setLightbox(active)}
+                style={{
+                  padding: 0,
+                  border: 0,
+                  background: "none",
+                  cursor: "zoom-in",
+                  display: "block",
+                  width: "100%",
+                }}
+                aria-label="Open image viewer"
+              >
+              <div
+                  style={{
+                    border: "1px solid var(--line)",
+                    borderRadius: "var(--radius)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <ZoomLens
+                    src={sel.images[active]}
+                    alt={`${product.name} in ${sel.color}`}
+                    w={1400}
+                    ratio="4/3"
+                    eager
+                  />
+                </div>
+              </button>
+            )}
             <div style={{ position: "absolute", right: 16, top: 16 }}>
               <SaveShare
                 slug={product.slug}
@@ -135,9 +159,13 @@ export default function PdpA({ product }: { product: Product }) {
                       ? "2px solid var(--ink)"
                       : "1px solid var(--line)",
                   overflow: "hidden",
+                  position: "relative",
                 }}
               >
                 <Img src={img} alt="" w={220} ratio="1" />
+                {i === 0 && isSpinnable(sel.spin) && (
+                  <span className="thumb-360">360°</span>
+                )}
               </button>
             ))}
             <button
@@ -234,6 +262,18 @@ export default function PdpA({ product }: { product: Product }) {
               </span>
             </div>
             <Swatches value={sel.color} onChange={sel.setColor} />
+          </div>
+
+          <div>
+            <div className="row between label" style={{ marginBottom: 12 }}>
+              <span>Shape</span>
+            </div>
+            <ConfigOptions
+              productSlug={product.slug}
+              cfg={sel.spinCfg}
+              fabricCode={sel.fabric.code}
+              onChange={sel.setOption}
+            />
           </div>
 
           <div>

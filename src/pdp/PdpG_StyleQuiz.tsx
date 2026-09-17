@@ -27,8 +27,8 @@ import {
 } from "lucide-react";
 import {
   colorHex,
+  heroRender,
   getProduct,
-  type ColorName,
   type Product,
 } from "../data/products";
 import { IMG } from "../data/images";
@@ -41,6 +41,8 @@ import {
   type QuizIcon,
 } from "../data/quiz";
 import { useProductSelection } from "../hooks/useProductSelection";
+import { ProductStage } from "../components/ProductStage";
+import { resolveDefaultSpin } from "../lib/spin";
 import { usePrefersReducedMotion } from "../hooks/useMediaQuery";
 import { useCart } from "../context/CartContext";
 import { money, moneyShort } from "../lib/money";
@@ -360,7 +362,8 @@ export default function PdpG({ product }: { product: Product }) {
               alignItems: "start",
             }}
           >
-            <Img
+            <ProductStage
+              spin={sel.spin}
               src={sel.images[0]}
               alt={`${product.name} in ${sel.color}`}
               w={1400}
@@ -589,7 +592,7 @@ function Results({
   const pct = isTop ? rec.match : rec.altMatch;
   const hex = colorHex(sel.color);
   const dims = dimsFromLayout(shown.layout!);
-  const photo = shown.colorImages?.[sel.color as ColorName] ?? shown.images[0];
+  const photo = heroRender(shown, sel.color) ?? shown.images[0];
 
   const sectionRef = useRef<HTMLElement>(null);
   const choose = (p: Product) => {
@@ -674,8 +677,9 @@ function Results({
             />
           </div>
           {view === "photo" ? (
-            <Img
-              key={photo}
+            <ProductStage
+              key={shown.slug + sel.color}
+              spin={resolveDefaultSpin(shown.slug, sel.fabric.code, photo)}
               src={photo}
               alt={`${shown.name} in ${sel.color}`}
               w={1400}

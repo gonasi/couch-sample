@@ -1280,3 +1280,74 @@ details summary::-webkit-details-marker {
     display: none;
   }
 }
+
+/* ---------- fabric swatches: 13 options, so the row has to wrap ---------- */
+.swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  /* On a phone a wrapped 13-chip grid eats the buy box; scroll it instead. */
+  .swatch-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .swatch-row::-webkit-scrollbar { display: none; }
+  .swatch-row > .swatch { flex: 0 0 auto; }
+}
+
+/* ---------- 360 spin stage ---------- */
+.spin-stage {
+  cursor: grab;
+  /* pan-y, never none: the stage is the largest element above the fold, so the page
+     must still scroll vertically over it. The browser hands us the horizontal axis. */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  outline-offset: 3px;
+}
+.spin-stage:active { cursor: grabbing; }
+.spin-stage > img { transition: none; }
+.spin-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  animation: fadeIn 0.3s ease both;
+}
+.thumb-360 {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 999px;
+  padding: 1px 5px;
+  pointer-events: none;
+}
+
+/* ---------- configurator option chips ---------- */
+.chip:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+.chip-note {
+  font-family: var(--mono);
+  font-size: 9px;
+  opacity: 0.6;
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

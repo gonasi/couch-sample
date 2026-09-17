@@ -18,6 +18,8 @@ import {
   type Product,
 } from "../data/products";
 import { useProductSelection } from "../hooks/useProductSelection";
+import { ProductStage } from "../components/ProductStage";
+import { ConfigOptions } from "../components/FeaturePicker";
 import { useCart } from "../context/CartContext";
 import { useUI } from "../context/UIContext";
 import { money, moneyShort, priceLabel } from "../lib/money";
@@ -304,7 +306,8 @@ export default function PdpC({ product }: { product: Product }) {
                 />
               </div>
             ) : (
-              <Img
+              <ProductStage
+                spin={sel.spin}
                 src={sel.images[0]}
                 alt={`${product.name} in ${sel.color}`}
                 w={1400}
@@ -552,6 +555,14 @@ export default function PdpC({ product }: { product: Product }) {
                   </div>
                   <div style={{ marginTop: 14 }}>
                     <FabricLens color={sel.color} compact ratio="16/9" />
+                  </div>
+                  <div style={{ marginTop: 18 }}>
+                    <ConfigOptions
+                      productSlug={product.slug}
+                      cfg={sel.spinCfg}
+                      fabricCode={sel.fabric.code}
+                      onChange={sel.setOption}
+                    />
                   </div>
                   <div
                     className="card row between wrap"

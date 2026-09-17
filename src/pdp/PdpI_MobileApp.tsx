@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { COLORS, COUCHES, colorHex, type Product } from "../data/products";
 import { useProductSelection } from "../hooks/useProductSelection";
+import { ProductStage, isSpinnable } from "../components/ProductStage";
+import type { SpinSource } from "../lib/spin";
 import { useScrollSpy } from "../hooks/useScrollSpy";
 import { useSaved } from "../hooks/useSaved";
 import { useMediaQuery } from "../hooks/useMediaQuery";
@@ -131,6 +133,7 @@ export default function PdpI({ product }: { product: Product }) {
       <div className="app-shell">
         <Gallery
           images={sel.images}
+          spin={sel.spin}
           alt={`${product.name} in ${sel.color}`}
           saved={isSaved(product.slug)}
           onSave={() => {
@@ -649,12 +652,14 @@ function Gallery({
   saved,
   onSave,
   top,
+  spin,
 }: {
   images: string[];
   alt: string;
   saved: boolean;
   onSave: () => void;
   top: React.ReactNode;
+  spin: SpinSource;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [slide, setSlide] = useState(0);
@@ -721,19 +726,35 @@ function Gallery({
         onScroll={onScroll}
         style={{ touchAction: "pan-x pan-y" }}
       >
-        {images.map((src, i) => (
+        {images.map((src, i) => {
+          /* Slide 0 is the spin stage. A horizontal drag cannot both spin and page a
+             scroll-snap scroller, so slide 0 claims the gesture outright: the carousel
+             will not swipe past it, and the dots / chevrons are the way out. The
+             double-tap-to-save and tap-to-lightbox handlers are skipped there too. */
+          const isSpin = i === 0 && isSpinnable(spin);
+          return (
           <div
             key={src + i}
-            style={{ position: "relative", cursor: "zoom-in" }}
-            onPointerDown={(e) =>
-              (down.current = {
-                x: e.clientX,
-                y: e.clientY,
-                t: performance.now(),
-              })
-            }
-            onPointerUp={(e) => onPointerUp(e, i)}
+            style={{
+              position: "relative",
+              cursor: isSpin ? "grab" : "zoom-in",
+              touchAction: isSpin ? "none" : undefined,
+            }}
+            onPointerDown={(e) => {
+              if (isSpin) { e.stopPropagation(); return; }
+              down.current = { x: e.clientX, y: e.clientY, t: performance.now() };
+            }}
+            onPointerUp={(e) => { if (!isSpin) onPointerUp(e, i); }}
           >
+            {isSpin ? (
+              <ProductStage
+                spin={spin}
+                src={src}
+                alt={alt}
+                ratio="4/5"
+                eager
+              />
+            ) : (
             <Img
               src={src}
               alt={`${alt}, photo ${i + 1}`}
@@ -741,6 +762,7 @@ function Gallery({
               ratio="4/5"
               eager={i === 0}
             />
+            )}
             {i === slide &&
               bursts.map((b) => (
                 <Heart
@@ -760,7 +782,8 @@ function Gallery({
                 />
               ))}
           </div>
-        ))}
+          );
+        })}
       </div>
       <div
         className="row between"

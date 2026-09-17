@@ -18,6 +18,7 @@ import { BENEFITS } from "../data/content";
 import { HOME_IMAGES, UGC } from "../data/images";
 import { REVIEWS } from "../data/reviews";
 import { useProductSelection } from "../hooks/useProductSelection";
+import { ProductStage, isSpinnable, photoSource } from "../components/ProductStage";
 import { useCart } from "../context/CartContext";
 import { useUI } from "../context/UIContext";
 import { money } from "../lib/money";
@@ -175,7 +176,12 @@ export default function PdpD({ product }: { product: Product }) {
               overflow: "hidden",
               border: "1px solid var(--line)",
             }}
-            onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+            /* Slide 0 is the spin stage: let it own horizontal drags rather than
+               paging the carousel out from under the gesture. */
+            onTouchStart={(e) =>
+              (touchX.current =
+                idx === 0 && isSpinnable(sel.spin) ? null : e.touches[0].clientX)
+            }
             onTouchEnd={(e) => {
               if (touchX.current === null) return;
               const dx = e.changedTouches[0].clientX - touchX.current;
@@ -183,7 +189,8 @@ export default function PdpD({ product }: { product: Product }) {
               touchX.current = null;
             }}
           >
-            <Img
+            <ProductStage
+              spin={idx === 0 ? sel.spin : photoSource(images[idx])}
               src={images[idx]}
               alt={`${product.name} photo ${idx + 1}`}
               w={1400}

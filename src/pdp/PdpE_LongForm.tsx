@@ -5,6 +5,7 @@ import { COLORS, COUCHES, type Product } from "../data/products";
 import { HOME_IMAGES, IMG } from "../data/images";
 import { BUYBOX_QUOTES, DEEP_REVIEWS, PRESS } from "../data/reviewsDeep";
 import { useProductSelection } from "../hooks/useProductSelection";
+import { ProductStage, isSpinnable } from "../components/ProductStage";
 import { useUI } from "../context/UIContext";
 import { money } from "../lib/money";
 import { Accordion, Breadcrumbs, Img, QtyStepper, Stars } from "../components/ui";
@@ -107,9 +108,13 @@ export default function PdpE({ product }: { product: Product }) {
                       i === active
                         ? "2px solid var(--ink)"
                         : "1px solid var(--line)",
+                    position: "relative",
                   }}
                 >
                   <Img src={img} alt="" w={200} ratio="1" />
+                  {i === 0 && isSpinnable(sel.spin) && (
+                    <span className="thumb-360">360°</span>
+                  )}
                 </button>
               ))}
             </div>
@@ -121,26 +126,39 @@ export default function PdpE({ product }: { product: Product }) {
                 border: "1px solid var(--line)",
               }}
             >
-              <button
-                onClick={() => setLightbox(active)}
-                style={{
-                  padding: 0,
-                  border: 0,
-                  background: "none",
-                  display: "block",
-                  width: "100%",
-                  cursor: "zoom-in",
-                }}
-                aria-label="Open image viewer"
-              >
-                <Img
-                  src={sel.images[active]}
+              {active === 0 && isSpinnable(sel.spin) ? (
+                /* Outside the <button>: a drag ending inside one fires a click on
+                   pointerup and would open the Lightbox on every spin. */
+                <ProductStage
+                  spin={sel.spin}
+                  src={sel.images[0]}
                   alt={`${product.name} in ${sel.color}`}
-                  w={1400}
-                  ratio="1"
+                  ratio="4/3"
                   eager
+                  onExpand={() => setLightbox(0)}
                 />
-              </button>
+              ) : (
+                <button
+                  onClick={() => setLightbox(active)}
+                  style={{
+                    padding: 0,
+                    border: 0,
+                    background: "none",
+                    display: "block",
+                    width: "100%",
+                    cursor: "zoom-in",
+                  }}
+                  aria-label="Open image viewer"
+                >
+                  <Img
+                    src={sel.images[active]}
+                    alt={`${product.name} in ${sel.color}`}
+                    w={1400}
+                    ratio="1"
+                    eager
+                  />
+                </button>
+              )}
               <div
                 style={{
                   position: "absolute",

@@ -23,6 +23,7 @@ import { useCart } from "../context/CartContext";
 import {
   COUCHES,
   colorHex,
+  heroRender,
   getById,
   type Product,
 } from "../data/products";
@@ -758,9 +759,7 @@ export function Hotspots({
                 <Img
                   src={
                     shopProduct.kind === "couch"
-                      ? (shopProduct.colorImages?.[
-                          color as keyof typeof shopProduct.colorImages
-                        ] ?? shopProduct.images[0])
+                      ? (heroRender(shopProduct, color) ?? shopProduct.images[0])
                       : shopProduct.images[0]
                   }
                   alt=""

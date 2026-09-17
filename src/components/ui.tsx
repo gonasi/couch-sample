@@ -22,7 +22,7 @@ import {
   Truck,
 } from "lucide-react";
 import { sized } from "../data/images";
-import { COLORS, COUCHES } from "../data/products";
+import { COLORS, COUCHES, swatchUrl } from "../data/products";
 import { moneyShort } from "../lib/money";
 import { useScrollLock } from "../hooks/useScrollLock";
 
@@ -165,23 +165,30 @@ export function Swatches({
 }) {
   return (
     <div
-      className="row"
-      style={{ gap: size > 30 ? 12 : 9 }}
+      className="swatch-row"
+      style={{ ["--sw" as string]: `${size}px`, gap: size > 30 ? 12 : 9 }}
       role="radiogroup"
-      aria-label="Color"
+      aria-label="Fabric"
     >
-      {COLORS.map((c) => (
-        <button
-          key={c.name}
-          title={c.name}
-          aria-label={c.name}
-          aria-checked={value === c.name}
-          role="radio"
-          className={`swatch ${value === c.name ? "active" : ""}`}
-          style={{ width: size, height: size, background: c.hex }}
-          onClick={() => onChange(c.name)}
-        />
-      ))}
+      {COLORS.map((c) => {
+        const photo = swatchUrl(c.name);
+        return (
+          <button
+            key={c.name}
+            title={c.name}
+            aria-label={c.name}
+            aria-checked={value === c.name}
+            role="radio"
+            className={`swatch ${value === c.name ? "active" : ""}`}
+            style={{
+              width: size,
+              height: size,
+              background: photo ? `url(${photo}) center/cover` : c.hex,
+            }}
+            onClick={() => onChange(c.name)}
+          />
+        );
+      })}
     </div>
   );
 }
