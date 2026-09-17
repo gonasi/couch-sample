@@ -5,6 +5,9 @@ export const VARIANTS: Variant[] = ["a", "b", "c", "d", "e", "f", "g", "h", "i",
 export const isVariant = (s: string | null | undefined): s is Variant =>
   VARIANTS.includes(s as Variant);
 
+/** What a first-time visitor sees, and the fallback for an unrecognised ?v=. */
+export const DEFAULT_VARIANT: Variant = "j";
+
 export interface Chrome {
   ticker: boolean;
   header: "solid" | "transparent";
