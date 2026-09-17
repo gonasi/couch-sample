@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { COLORS, COUCHES, colorHex, type Product } from "../data/products";
 import { useProductSelection } from "../hooks/useProductSelection";
-import { ProductStage, isSpinnable } from "../components/ProductStage";
+import { ProductStage, isRender, isSpinnable } from "../components/ProductStage";
 import type { SpinSource } from "../lib/spin";
 import { useScrollSpy } from "../hooks/useScrollSpy";
 import { useSaved } from "../hooks/useSaved";
@@ -732,6 +732,7 @@ function Gallery({
              will not swipe past it, and the dots / chevrons are the way out. The
              double-tap-to-save and tap-to-lightbox handlers are skipped there too. */
           const isSpin = i === 0 && isSpinnable(spin);
+          const isRender0 = i === 0 && isRender(spin);
           return (
           <div
             key={src + i}
@@ -746,7 +747,7 @@ function Gallery({
             }}
             onPointerUp={(e) => { if (!isSpin) onPointerUp(e, i); }}
           >
-            {isSpin ? (
+            {isRender0 ? (
               <ProductStage
                 spin={spin}
                 src={src}

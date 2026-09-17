@@ -5,7 +5,7 @@ import { COLORS, COUCHES, type Product } from "../data/products";
 import { HOME_IMAGES, IMG } from "../data/images";
 import { BUYBOX_QUOTES, DEEP_REVIEWS, PRESS } from "../data/reviewsDeep";
 import { useProductSelection } from "../hooks/useProductSelection";
-import { ProductStage, isSpinnable } from "../components/ProductStage";
+import { ProductStage, isRender, isSpinnable } from "../components/ProductStage";
 import { useUI } from "../context/UIContext";
 import { money } from "../lib/money";
 import { Accordion, Breadcrumbs, Img, QtyStepper, Stars } from "../components/ui";
@@ -150,13 +150,23 @@ export default function PdpE({ product }: { product: Product }) {
                   }}
                   aria-label="Open image viewer"
                 >
-                  <Img
-                    src={sel.images[active]}
-                    alt={`${product.name} in ${sel.color}`}
-                    w={1400}
-                    ratio="1"
-                    eager
-                  />
+                  {active === 0 && isRender(sel.spin) ? (
+                    <ProductStage
+                      spin={sel.spin}
+                      src={sel.images[0]}
+                      alt={`${product.name} in ${sel.color}`}
+                      ratio="4/3"
+                      eager
+                    />
+                  ) : (
+                    <Img
+                      src={sel.images[active]}
+                      alt={`${product.name} in ${sel.color}`}
+                      w={1400}
+                      ratio="1"
+                      eager
+                    />
+                  )}
                 </button>
               )}
               <div

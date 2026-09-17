@@ -18,7 +18,7 @@ import { DeepReviews, FaqTabs, QandA } from "../components/DeepSections";
 import { Lightbox } from "../components/Overlays";
 import VideoModal from "../components/VideoModal";
 import { ZoomLens } from "../components/Magnify";
-import { ProductStage, isSpinnable } from "../components/ProductStage";
+import { ProductStage, isRender, isSpinnable } from "../components/ProductStage";
 import { ConfigOptions } from "../components/FeaturePicker";
 import { ConfigCompareModal, SaveShare } from "../components/Interactive";
 import { RoomFitChecker } from "../components/RoomFit";
@@ -92,20 +92,33 @@ export default function PdpA({ product }: { product: Product }) {
                 }}
                 aria-label="Open image viewer"
               >
-              <div
+                <div
                   style={{
                     border: "1px solid var(--line)",
                     borderRadius: "var(--radius)",
                     overflow: "hidden",
                   }}
                 >
-                  <ZoomLens
-                    src={sel.images[active]}
-                    alt={`${product.name} in ${sel.color}`}
-                    w={1400}
-                    ratio="4/3"
-                    eager
-                  />
+                  {active === 0 && isRender(sel.spin) ? (
+                    /* A still-only configuration is still a 16:10 render, so it goes
+                       through ProductStage; ZoomLens would inherit object-fit: cover
+                       and crop the sofa. */
+                    <ProductStage
+                      spin={sel.spin}
+                      src={sel.images[0]}
+                      alt={`${product.name} in ${sel.color}`}
+                      ratio="4/3"
+                      eager
+                    />
+                  ) : (
+                    <ZoomLens
+                      src={sel.images[active]}
+                      alt={`${product.name} in ${sel.color}`}
+                      w={1400}
+                      ratio="4/3"
+                      eager
+                    />
+                  )}
                 </div>
               </button>
             )}

@@ -84,5 +84,10 @@ export const photoSource = (src: string): SpinSource => ({
   reason: "no-combo",
 });
 
-/** True when the hero slot is a real 360 set, for "360" badges on thumb 0. */
+/** True when the hero slot is a real 360 set: it owns drag gestures and gets the badge. */
 export const isSpinnable = (s: SpinSource) => s.kind === "spin";
+
+/** True when the slot is a Cylindo render at all (spin OR single still). Renders are 16:10
+ *  and must go through ProductStage - falling back to <Img>/<ZoomLens> would inherit
+ *  `.media > img { object-fit: cover }` and crop the sofa. */
+export const isRender = (s: SpinSource) => s.kind === "spin" || s.kind === "still";
